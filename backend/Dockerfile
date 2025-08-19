@@ -14,5 +14,5 @@ COPY . .
 # Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio CORRECTO - usa shell para expandir variables
+# Comando de inicio CORRECTO - shell expande variables
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
