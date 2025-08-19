@@ -1,4 +1,3 @@
-# app/main.py
 import os
 from fastapi import FastAPI
 
@@ -18,6 +17,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    # Obtener puerto de variable de entorno o usar 8000 por defecto
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
