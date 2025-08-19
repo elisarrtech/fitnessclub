@@ -1,12 +1,8 @@
-#Punto de entrada
+# app/main.py
+import os
 from fastapi import FastAPI
-from app.core.config import settings
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    description="API para gestión de centro fitness"
-)
+app = FastAPI(title="Fitness Club API")
 
 @app.get("/")
 async def root():
@@ -17,5 +13,11 @@ async def health_check():
     return {
         "status": "healthy",
         "service": "fitness-api",
-        "version": settings.VERSION
+        "timestamp": "2025-08-19T17:00:00Z"
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    # Obtener puerto de variable de entorno o usar 8000 por defecto
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
