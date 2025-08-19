@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     MONGODB_URI: str = "mongodb+srv://elisarrtech:CunmKUAxHKep6SEA@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     DATABASE_NAME: str = "elisarrtech"
     
-    JWT_SECRET: str = "fitnessclub_jwt_secret"
+    JWT_SECRET: str = "fitnessclub_jwt_secret_2025"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
