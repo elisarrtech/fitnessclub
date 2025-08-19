@@ -6,8 +6,8 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
-    MONGODB_URI: str = "mongodb://localhost:27017/fitnessclub"
-    DATABASE_NAME: str = "fitnessclub"
+    MONGODB_URI: str = "mongodb+srv://elisarrtech:CunmKUAxHKep6SEA@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    DATABASE_NAME: str = "elisarrtech"
     
     JWT_SECRET: str = "fitnessclub_jwt_secret"
     JWT_ALGORITHM: str = "HS256"
