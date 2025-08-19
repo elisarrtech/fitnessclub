@@ -1,3 +1,4 @@
+#Punto de entrada
 from fastapi import FastAPI
 from app.core.config import settings
 
@@ -17,4 +18,4 @@ async def health_check():
         "status": "healthy",
         "service": "fitness-api",
         "version": settings.VERSION
-    }#Punto de entrada
+    }
