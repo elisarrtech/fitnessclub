@@ -1,8 +1,9 @@
-// frontend/src/pages/ClassDetail.jsx
+// frontend/src/pages/ClassDetail.jsx (actualizado)
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { classesAPI } from '../services/api';
 import BookingForm from '../components/bookings/BookingForm';
+import ReviewList from '../components/reviews/ReviewList';
 
 const ClassDetail = () => {
   const { id } = useParams();
@@ -205,6 +206,9 @@ const ClassDetail = () => {
               )}
             </div>
           </div>
+
+          {/* Reseñas */}
+          <ReviewList classId={classData.id} />
 
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex justify-between items-center">
