@@ -1,4 +1,4 @@
-// frontend/src/services/api.js
+// frontend/src/services/api.js (actualizado)
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/constants';
 
@@ -37,6 +37,9 @@ export const bookingsAPI = {
   getMyBookings: () => api.get('/api/v1/bookings/my-bookings'),
   cancel: (bookingId) => api.post(`/api/v1/bookings/${bookingId}/cancel`),
   getBySchedule: (scheduleId) => api.get(`/api/v1/bookings/schedule/${scheduleId}`),
+  // Nueva función para lista de espera
+  joinWaitlist: (waitlistData) => api.post('/api/v1/bookings/waitlist', waitlistData),
+  getWaitlist: (scheduleId) => api.get(`/api/v1/bookings/waitlist/${scheduleId}`),
 };
 
 // Funciones de instructores
