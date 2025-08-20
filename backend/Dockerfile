@@ -17,5 +17,5 @@ COPY . .
 # Exponer puerto
 EXPOSE 8000
 
-# COMANDO CRÍTICO CORRECTO:
+# COMANDO CRÍTICO CORRECTO - Inicia directamente con Python, no con Uvicorn:
 CMD ["sh", "-c", "python app/main.py"]
