@@ -2,13 +2,14 @@
 import os
 from flask import Flask, jsonify
 from flask_cors import CORS
+from app.api.v1 import auth, users, classes, instructors, bookings
 
 def create_app():
     app = Flask(__name__)
     
     # Configurar CORS
     CORS(app, origins=[
-        "https://68a53b5ad44d4ea56a6cb0c3--fitnessclubfront.netlify.app/",
+        "https://68a539c509058f80db1b1759--fitnessclubfront.netlify.app",
         "http://localhost:3000",
         "http://localhost:5173"
     ])
@@ -24,6 +25,13 @@ def create_app():
             "service": "fitness-api-python",
             "version": "1.0.0"
         })
+    
+    # Registrar blueprints
+    app.register_blueprint(auth.auth_bp)
+    app.register_blueprint(users.users_bp)
+    app.register_blueprint(classes.classes_bp)  # ← Esta línea es crucial
+    app.register_blueprint(instructors.instructors_bp)
+    app.register_blueprint(bookings.bookings_bp)
     
     return app
 
