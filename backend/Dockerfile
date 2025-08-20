@@ -17,5 +17,5 @@ COPY . .
 # Exponer puerto
 EXPOSE 8000
 
-# COMANDO CORRECTO:
+# COMANDO CORRECTO - Ejecutar como módulo:
 CMD ["python", "-m", "app.main"]
