@@ -2,6 +2,8 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from bson import ObjectId
+from typing import Optional, Any, Dict
 
 load_dotenv()
 
@@ -17,10 +19,27 @@ instructors_collection = db.instructors
 bookings_collection = db.bookings
 schedules_collection = db.schedules
 
-# Índices recomendados
-users_collection.create_index("email", unique=True)
-classes_collection.create_index("title")
-instructors_collection.create_index("email", sparse=True)
-bookings_collection.create_index([("schedule_id", 1), ("user_id", 1)], unique=True)
-schedules_collection.create_index("class_id")
-schedules_collection.create_index("start_ts")
+def init_db():
+    """Inicializar base de datos con índices"""
+    try:
+        # Índices recomendados
+        users_collection.create_index("email", unique=True)
+        classes_collection.create_index("title")
+        instructors_collection.create_index("email", sparse=True)
+        bookings_collection.create_index([("schedule_id", 1), ("user_id", 1)], unique=True)
+        schedules_collection.create_index("class_id")
+        schedules_collection.create_index("start_ts")
+        schedules_collection.create_index("instructor_id")
+        print("✅ Índices de base de datos creados exitosamente")
+    except Exception as e:
+        print(f"⚠️ Error creando índices: {e}")
+
+def serialize_mongo_id(obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Convertir ObjectId de MongoDB a string para JSON"""
+    if obj and "_id" in obj:
+        obj["id"] = str(obj["_id"])
+        del obj["_id"]
+    return obj
+
+# Inicializar base de datos
+init_db()
