@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos de requerimientos e instalar dependencias de Python
+# Copiar archivos de requerimientos e instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -17,5 +17,5 @@ COPY . .
 # Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio
+# COMANDO CRÍTICO CORRECTO:
 CMD ["sh", "-c", "python app/main.py"]
