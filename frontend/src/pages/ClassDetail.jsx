@@ -117,6 +117,64 @@ const ClassDetail = () => {
                   <span className="text-yellow-500">★</span>
                   <span className="ml-1 text-sm text-gray-600">{classData.instructor.rating}</span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Horarios disponibles */}
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold text-gray-900">Horarios Disponibles</h2>
+            <div className="mt-4 space-y-3">
+              {classData.schedules && classData.schedules.length > 0 ? (
+                classData.schedules.map((schedule) => (
+                  <div key={schedule.id} className="flex justify-between items-center p-4 border border-gray-200 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        {new Date(schedule.start_ts).toLocaleDateString('es-ES', { 
+                          weekday: 'long', 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </p>
+                      <p className="text-gray-600">
+                        {new Date(schedule.start_ts).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })} - {new Date(schedule.end_ts).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </p>
+                      {schedule.room && (
+                        <p className="text-sm text-gray-500">Sala: {schedule.room}</p>
+                      )}
+                    </div>
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
+                      Reservar
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No hay horarios disponibles próximamente.</p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-600">Capacidad: {classData.capacity} personas</p>
+              </div>
+              <button className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-md transition duration-300">
+                Reservar Clase
+              </button>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+export default ClassDetail;
