@@ -1,6 +1,6 @@
 // src/pages/admin/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth'; 
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const Dashboard = () => {
