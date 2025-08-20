@@ -2,27 +2,37 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import ssl
 
 load_dotenv()
 
 try:
-    # Configuración mejorada para MongoDB Atlas
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/fitnessclub")
+    # Usar la URL completa de MongoDB Atlas
+    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     
-    # Configurar cliente con opciones específicas para evitar problemas de SSL
+    # Configuración optimizada para MongoDB Atlas
     client = MongoClient(
         MONGODB_URI,
         tls=True,
-        tlsAllowInvalidCertificates=True,  # Solo para entornos de prueba
-        serverSelectionTimeoutMS=5000,
-        connectTimeoutMS=5000,
-        socketTimeoutMS=5000,
+        tlsAllowInvalidCertificates=False,  # Usar certificados válidos
+        serverSelectionTimeoutMS=10000,     # Timeout más largo
+        connectTimeoutMS=10000,
+        socketTimeoutMS=10000,
         retryWrites=True,
-        retryReads=True
+        retryReads=True,
+        maxPoolSize=50,
+        minPoolSize=5
     )
     
-    db = client[os.getenv("DATABASE_NAME", "elisarrtech")]
+    # Extraer el nombre de la base de datos de la URI o usar el default
+    db_name = os.getenv("DATABASE_NAME")
+    if not db_name:
+        # Intentar obtener el nombre de la base de datos de la URI
+        from urllib.parse import urlparse
+        parsed_uri = urlparse(MONGODB_URI)
+        path_parts = parsed_uri.path.strip('/').split('?')
+        db_name = path_parts[0] if path_parts and path_parts[0] else "elisarrtech"
+    
+    db = client[db_name]
     
     # Colecciones
     users_collection = db.users
@@ -33,12 +43,13 @@ try:
 
     def init_db():
         try:
-            # Verificar conexión con timeout más corto
-            client.admin.command('ping', readPreference='primaryPreferred')
-            print("✅ Conexión a MongoDB exitosa")
+            # Verificar conexión
+            client.admin.command('ping')
+            print("✅ Conexión a MongoDB Atlas exitosa")
+            print(f"✅ Base de datos: {db_name}")
         except Exception as e:
-            print(f"⚠️ Error conectando a MongoDB: {e}")
-            # Continuar aunque falle la conexión (para que la app siga funcionando)
+            print(f"⚠️ Error conectando a MongoDB Atlas: {e}")
+            print("⚠️ La aplicación continuará funcionando pero sin acceso a la base de datos")
 
     def serialize_mongo_id(obj):
         if obj and "_id" in obj:
