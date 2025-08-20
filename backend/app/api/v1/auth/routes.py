@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.api.v1.auth.controllers import register_user, login_user
 
-auth_bp = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -9,8 +9,10 @@ def register():
         data = request.get_json()
         result = register_user(data)
         return jsonify(result), 201
-    except Exception as e:
+    except ValueError as e:
         return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "Internal server error"}), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -18,5 +20,7 @@ def login():
         data = request.get_json()
         result = login_user(data)
         return jsonify(result)
-    except Exception as e:
+    except ValueError as e:
         return jsonify({"error": str(e)}), 401
+    except Exception as e:
+        return jsonify({"error": "Internal server error"}), 500
