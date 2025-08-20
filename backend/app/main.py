@@ -2,7 +2,7 @@
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from app.api.v1 import auth, users, classes, instructors
+from app.api.v1 import auth, users, classes, instructors, bookings
 from app.core.database import init_db
 
 def create_app():
@@ -29,6 +29,7 @@ def create_app():
     app.register_blueprint(users.users_bp)
     app.register_blueprint(classes.classes_bp)
     app.register_blueprint(instructors.instructors_bp)
+    app.register_blueprint(bookings.bookings_bp)
     
     return app
 
