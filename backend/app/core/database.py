@@ -5,21 +5,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Configuración más simple para evitar problemas de SSL
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:S5B%25%23-kGjj%21%25KJn@cluster0.yjot3u0.mongodb.net/fitnessclubdb?retryWrites=true&w=majority&appName=Cluster0")
+
 try:
-    # Usar la URL completa de MongoDB Atlas desde las variables de entorno
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:S5B%25%23-kGjj%21%25KJn@cluster0.yjot3u0.mongodb.net/fitnessclubdb?retryWrites=true&w=majority&appName=Cluster0")
-    
-    # Configuración optimizada para evitar problemas de SSL en Railway
+    # Configuración mínima para evitar problemas en Railway
     client = MongoClient(
         MONGODB_URI,
         tls=True,
-        tlsAllowInvalidCertificates=True,
-        serverSelectionTimeoutMS=5000,
-        connectTimeoutMS=5000,
-        socketTimeoutMS=5000,
-        maxPoolSize=1,  # Reducir el pool size
-        retryWrites=False,  # Desactivar retryWrites temporalmente
-        retryReads=False,   # Desactivar retryReads temporalmente
+        tlsAllowInvalidCertificates=True,  # Permitir certificados inválidos
+        serverSelectionTimeoutMS=3000,     # Timeout más corto
+        connectTimeoutMS=3000,
+        socketTimeoutMS=3000,
+        maxPoolSize=1,                     # Pool size mínimo
+        retryWrites=False,                 # Desactivar retry writes
         directConnection=False
     )
     
@@ -39,7 +38,7 @@ try:
             print("✅ Cliente MongoDB configurado")
             print(f"✅ Base de datos: {db_name}")
         except Exception as e:
-            print(f"⚠️ Error en configuración MongoDB: {e}")
+            print(f"⚠️ Advertencia MongoDB: {e}")
 
     def serialize_mongo_id(obj):
         if obj and "_id" in obj:
@@ -51,7 +50,7 @@ try:
     init_db()
     
 except Exception as e:
-    print(f"❌ Error grave en MongoDB: {e}")
+    print(f"❌ Error en MongoDB: {e}")
     users_collection = None
     classes_collection = None
     instructors_collection = None
