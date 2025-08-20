@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/AuditLog.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+  const { user } = useContext(AuthContext);
 import { auditAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ReportGenerator from '../../components/admin/reports/ReportGenerator';
 
 const AuditLog = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [auditLogs, setAuditLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
