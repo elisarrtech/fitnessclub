@@ -1,16 +1,11 @@
 # app/main.py
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
-from app.api.v1 import auth, users, classes, instructors, bookings
-from app.core.database import init_db
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    
-    # Inicializar base de datos
-    init_db()
     
     @app.route("/")
     def root():
@@ -23,13 +18,6 @@ def create_app():
             "service": "fitness-api-python",
             "version": "1.0.0"
         })
-    
-    # Registrar blueprints
-    app.register_blueprint(auth.auth_bp)
-    app.register_blueprint(users.users_bp)
-    app.register_blueprint(classes.classes_bp)
-    app.register_blueprint(instructors.instructors_bp)
-    app.register_blueprint(bookings.bookings_bp)
     
     return app
 
