@@ -43,24 +43,49 @@ def create_app():
         app.register_blueprint(bookings.bookings_bp)
         print("✅ Blueprints registrados exitosamente")
         
-    except ImportError as e:
-        print(f"❌ Error importando blueprints: {e}")
+    except ImportError as import_error:
+        print(f"❌ Error importando blueprints: {import_error}")
         import traceback
         traceback.print_exc()
         
         # Registrar rutas de fallback para diagnóstico
         @app.route("/api/v1/classes")
         def classes_fallback():
-            return jsonify({"error": "Classes blueprint not registered", "details": str(e)}), 500
+            return jsonify({
+                "error": "Classes blueprint not registered", 
+                "details": str(import_error),
+                "type": "ImportError"
+            }), 500
             
         @app.route("/api/v1/classes/with-schedules")
         def classes_with_schedules_fallback():
-            return jsonify({"error": "Classes with schedules endpoint not available", "details": str(e)}), 500
+            return jsonify({
+                "error": "Classes with schedules endpoint not available", 
+                "details": str(import_error),
+                "type": "ImportError"
+            }), 500
     
-    except Exception as e:
-        print(f"❌ Error registrando blueprints: {e}")
+    except Exception as general_error:
+        print(f"❌ Error registrando blueprints: {general_error}")
         import traceback
         traceback.print_exc()
+        
+        # Registrar rutas de fallback para errores generales
+        @app.route("/api/v1/classes")
+        def classes_fallback():
+            return jsonify({
+                "error": "Classes blueprint registration failed", 
+                "details": str(general_error),
+                "type": "GeneralError"
+            }), 500
+            
+        @app.route("/api/v1/classes/with-schedules")
+        def classes_with_schedules_fallback():
+            return jsonify({
+                "error": "Classes with schedules endpoint registration failed", 
+                "details": str(general_error),
+                "type": "GeneralError"
+            }), 500
     
     return app
 
