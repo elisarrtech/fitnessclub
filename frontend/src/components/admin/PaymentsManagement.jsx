@@ -6,7 +6,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ReportGenerator from '../../components/admin/reports/ReportGenerator';
 
 const PaymentsManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
