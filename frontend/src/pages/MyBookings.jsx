@@ -1,7 +1,7 @@
 // frontend/src/pages/MyBookings.jsx (actualizado)
 import React, { useState, useEffect } from 'react';
 import { bookingsAPI } from '../services/api';
-import { useAuth } from '../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import notificationService from '../services/notificationService';
 
@@ -9,7 +9,7 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
