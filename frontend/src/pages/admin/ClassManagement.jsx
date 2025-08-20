@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/ClassManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { classesAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ClassForm from './ClassForm'; 
 
 const ClassManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
