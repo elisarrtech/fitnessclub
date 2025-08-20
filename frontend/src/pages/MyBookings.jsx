@@ -1,8 +1,9 @@
-// frontend/src/pages/MyBookings.jsx
+// frontend/src/pages/MyBookings.jsx (actualizado)
 import React, { useState, useEffect } from 'react';
 import { bookingsAPI } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import notificationService from '../services/notificationService';
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -29,15 +30,19 @@ const MyBookings = () => {
     }
   };
 
-  const handleCancelBooking = async (bookingId) => {
+  const handleCancelBooking = async (booking) => {
     if (!window.confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
       return;
     }
 
     try {
-      await bookingsAPI.cancel(bookingId);
+      await bookingsAPI.cancel(booking.id);
+      
+      // Enviar notificación de cancelación
+      await notificationService.sendBookingCancellation(booking, user);
+      
       // Actualizar la lista de reservas
-      setBookings(bookings.filter(booking => booking.id !== bookingId));
+      setBookings(bookings.filter(b => b.id !== booking.id));
     } catch (err) {
       alert('Error al cancelar la reserva');
     }
@@ -167,7 +172,7 @@ const MyBookings = () => {
                     <div>
                       {booking.status === 'RESERVED' && (
                         <button
-                          onClick={() => handleCancelBooking(booking.id)}
+                          onClick={() => handleCancelBooking(booking)}
                           className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                           Cancelar
