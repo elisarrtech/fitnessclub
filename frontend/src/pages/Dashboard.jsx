@@ -1,10 +1,10 @@
-// src/pages/admin/Dashboard.jsx
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth'; 
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+// frontend/src/pages/Dashboard.jsx
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({
     users: 0,
     classes: 0,
