@@ -7,7 +7,7 @@ load_dotenv()
 
 try:
     # Usar la URL completa de MongoDB Atlas
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://fitnessclubdb:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+    MONGODB_URI = os.getenv("MONGODB_URI", "MONGODB_URI=mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/fitnessclubdb?retryWrites=true&w=majority&appName=Cluster0")
     
     # Configuración MÍNIMA para evitar problemas en Railway
     client = MongoClient(
