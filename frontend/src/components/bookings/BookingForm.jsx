@@ -1,7 +1,8 @@
-// frontend/src/components/bookings/BookingForm.jsx
+// frontend/src/components/bookings/BookingForm.jsx (actualizado)
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { bookingsAPI } from '../../services/api';
+import notificationService from '../../services/notificationService';
 
 const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
   const { user } = useAuth();
@@ -20,10 +21,13 @@ const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
     try {
       const bookingData = {
         schedule_id: schedule.id,
-        user_email: user.email // En producción usar user.id
+        user_email: user.email
       };
 
       const response = await bookingsAPI.create(bookingData);
+      
+      // Enviar notificación de confirmación
+      await notificationService.sendBookingConfirmation(response.data, user);
       
       if (onBookingSuccess) {
         onBookingSuccess(response.data);
