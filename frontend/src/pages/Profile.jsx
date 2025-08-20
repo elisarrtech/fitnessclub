@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('profile');
 
   if (!user) {
