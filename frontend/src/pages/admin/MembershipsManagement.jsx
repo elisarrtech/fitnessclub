@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/MembershipsManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import { membershipsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import MembershipForm from '../../components/admin/MembershipForm';
 
 const MembershipsManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [memberships, setMemberships] = useState([]);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
