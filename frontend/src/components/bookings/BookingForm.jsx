@@ -1,8 +1,9 @@
-// frontend/src/components/bookings/BookingForm.jsx (actualizado)
-import React, { useState } from 'react';
+// frontend/src/components/bookings/BookingForm.jsx (actualizado con recordatorios)
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { bookingsAPI } from '../../services/api';
 import notificationService from '../../services/notificationService';
+import reminderService from '../../services/reminderService';
 
 const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
   const { user } = useAuth();
@@ -28,6 +29,9 @@ const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
       
       // Enviar notificación de confirmación
       await notificationService.sendBookingConfirmation(response.data, user);
+      
+      // Programar recordatorio (1 hora antes de la clase)
+      reminderService.scheduleReminder(response.data, user, 60);
       
       if (onBookingSuccess) {
         onBookingSuccess(response.data);
@@ -82,6 +86,12 @@ const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
           </p>
           <p className="text-sm text-blue-800">
             Capacidad disponible: {classData.capacity} lugares
+          </p>
+          <p className="text-sm text-blue-800 mt-2">
+            <svg className="inline h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+            </svg>
+            Recibirás un recordatorio 1 hora antes de la clase
           </p>
         </div>
 
