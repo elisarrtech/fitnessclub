@@ -7,9 +7,9 @@ from flask_cors import CORS
 load_dotenv()
 
 # Conexión a MongoDB
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/fitnessclub")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 client = MongoClient(MONGODB_URI)
-db = client[os.getenv("DATABASE_NAME", "fitnessclubdb")]
+db = client[os.getenv("DATABASE_NAME", "elisarrtech")]
 
 # Colecciones
 users_collection = db.users
