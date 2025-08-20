@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { classesAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ClassForm from '../../components/admin/ClassForm';
+import ClassForm from './ClassForm'; 
 
 const ClassManagement = () => {
   const { user } = useAuth();
