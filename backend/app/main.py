@@ -14,7 +14,7 @@ def create_app():
         "http://localhost:5173"   # Para Vite dev server
     ])
 
-    @app.route("/")
+   @app.route("/")
     def root():
         return jsonify({"message": "Fitness Club API - Python Flask"})
     
@@ -25,13 +25,6 @@ def create_app():
             "service": "fitness-api-python",
             "version": "1.0.0"
         })
-    
-    # Registrar blueprints
-    app.register_blueprint(auth.auth_bp)
-    app.register_blueprint(users.users_bp)
-    app.register_blueprint(classes.classes_bp)
-    app.register_blueprint(instructors.instructors_bp)
-    app.register_blueprint(bookings.bookings_bp)
     
     return app
 
