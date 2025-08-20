@@ -1,124 +1,84 @@
-# fitnessclub
-Centro fitness de salud y crecimiento personal
+# Fitness Club - Sistema de Gestión de Centro Deportivo
 
-fitnessclub/
-├── backend/                    # Python API (Común para Web y Mobile)
-│   ├── app/
-│   │   ├── api/               # Endpoints REST
-│   │   │   ├── v1/
-│   │   │   │   ├── auth.py          # Autenticación
-│   │   │   │   ├── users.py         # Gestión de usuarios
-│   │   │   │   ├── classes.py       # Clases y horarios
-│   │   │   │   ├── instructors.py   # Instructores
-│   │   │   │   ├── bookings.py      # Reservas
-│   │   │   │   └── payments.py      # Pagos
-│   │   │   └── deps.py         # Dependencias
-│   │   ├── core/              # Configuración y seguridad
-│   │   │   ├── config.py
-│   │   │   ├── security.py
-│   │   │   └── database.py
-│   │   ├── models/            # Modelos de MongoDB
-│   │   │   ├── user.py
-│   │   │   ├── class.py
-│   │   │   ├── instructor.py
-│   │   │   ├── schedule.py
-│   │   │   └── booking.py
-│   │   ├── schemas/           # Pydantic schemas
-│   │   │   ├── user.py
-│   │   │   ├── class.py
-│   │   │   ├── booking.py
-│   │   │   └── auth.py
-│   │   ├── services/          # Lógica de negocio
-│   │   │   ├── auth_service.py
-│   │   │   ├── booking_service.py
-│   │   │   └── notification_service.py
-│   │   └── main.py            # Punto de entrada
-│   ├── tests/                 # Tests unitarios
-│   ├── requirements.txt       # Dependencias
-│   ├── .env.example
-│   └── Dockerfile
-├── frontend/                  # Web App (React)
-│   ├── public/
-│   ├── src/
-│   │   ├── components/        # Componentes reutilizables
-│   │   │   ├── common/              # Botones, inputs, etc.
-│   │   │   ├── layout/              # Header, footer, sidebar
-│   │   │   └── features/            # Componentes específicos
-│   │   ├── pages/             # Páginas de la app
-│   │   │   ├── Home/
-│   │   │   ├── Classes/
-│   │   │   ├── Schedule/
-│   │   │   ├── Profile/
-│   │   │   └── Booking/
-│   │   ├── hooks/             # Custom hooks
-│   │   ├── services/          # API calls
-│   │   ├── contexts/          # React contexts
-│   │   ├── utils/             # Funciones auxiliares
-│   │   ├── routes/            # Configuración de rutas
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── package.json
-│   └── .env.example
-├── mobile/                    # Mobile App (React Native)
-│   ├── src/
-│   │   ├── components/        # Componentes reutilizables
-│   │   │   ├── common/              # Botones, inputs móviles
-│   │   │   └── features/            # Componentes específicos móviles
-│   │   ├── screens/           # Pantallas de la app
-│   │   │   ├── HomeScreen/
-│   │   │   ├── ClassesScreen/
-│   │   │   ├── ScheduleScreen/
-│   │   │   ├── ProfileScreen/
-│   │   │   └── BookingScreen/
-│   │   ├── navigation/        # Navegación móvil
-│   │   ├── hooks/             # Custom hooks móviles
-│   │   ├── services/          # API calls (compartido con web)
-│   │   ├── contexts/          # React contexts
-│   │   ├── utils/             # Funciones auxiliares
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── package.json
-│   └── .env.example
-├── shared/                    # Código compartido
-│   ├── types/                 # Tipos TypeScript compartidos
-│   ├── utils/                 # Funciones utilitarias compartidas
-│   └── constants/             # Constantes compartidas
-├── docs/                      # Documentación
-├── docker-compose.yml         # Orquestación de servicios
-├── README.md
-└── .gitignore
+Sistema completo para la gestión de un centro fitness con funcionalidades de registro de clases, horarios, reservas, instructores y usuarios.
 
+## 📋 Tabla de Contenidos
 
+- [Descripción General](#descripción-general)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Arquitectura del Sistema](#arquitectura-del-sistema)
+- [Funcionalidades Principales](#funcionalidades-principales)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación y Configuración](#instalación-y-configuración)
+- [Despliegue](#despliegue)
+- [API Endpoints](#api-endpoints)
+- [Base de Datos](#base-de-datos)
+- [Frontend](#frontend)
+- [Notificaciones y Comunicación](#notificaciones-y-comunicación)
+- [Sistema de Reservas](#sistema-de-reservas)
+- [Calificaciones y Reseñas](#calificaciones-y-reseñas)
+- [Lista de Espera](#lista-de-espera)
+- [Recordatorios Automáticos](#recordatorios-automáticos)
+- [Seguridad](#seguridad)
+- [Variables de Entorno](#variables-de-entorno)
+- [Desarrollo](#desarrollo)
+- [Contribución](#contribución)
+- [Licencia](#licencia)
 
-🚀 Tecnologías por Capa
-Backend (Python/FastAPI)
-FastAPI - Framework web moderno y rápido
-Motor - Driver asíncrono para MongoDB
-Pydantic - Validación de datos
-Uvicorn - Servidor ASGI
-JWT - Autenticación
-Passlib - Hash de contraseñas
-Stripe - Procesamiento de pagos
-Frontend Web (React)
-React 18 - Librería principal
-React Router - Navegación
-Axios - HTTP client
-TailwindCSS - Estilos
-React Query - Gestión de estado asíncrono
-Formik + Yup - Formularios y validación
-Mobile App (React Native)
-React Native - Framework móvil
-React Navigation - Navegación móvil
-NativeBase - Componentes UI móviles
-Axios - HTTP client (compartido)
-Async Storage - Almacenamiento local
+## 📝 Descripción General
 
+El sistema Fitness Club es una plataforma integral para centros deportivos que permite:
 
-profile
-Qwen3-Coder
-3:12 pm
-📱 Estructura Definitiva: Web + Mobile App
-Arquitectura Multi-Platform Completa
+- Gestión de clases y horarios
+- Reservas en línea de usuarios
+- Administración de instructores
+- Sistema de pagos
+- Notificaciones por email/SMS
+- Calificaciones y reseñas
+- Lista de espera para clases llenas
+- Recordatorios automáticos
+- Panel administrativo
+
+## ⚙️ Tecnologías Utilizadas
+
+### Backend
+- **Python 3.11**
+- **Flask** - Framework web
+- **MongoDB** - Base de datos NoSQL
+- **PyMongo** - Driver para MongoDB
+- **JWT** - Autenticación basada en tokens
+- **Bcrypt** - Hash de contraseñas
+- **Flask-CORS** - Manejo de CORS
+
+### Frontend
+- **React 18** - Librería de interfaces
+- **Vite** - Build tool
+- **Tailwind CSS** - Framework CSS
+- **React Router** - Navegación
+- **Axios** - Cliente HTTP
+
+### Infraestructura
+- **Railway** - Despliegue del backend
+- **Netlify** - Despliegue del frontend
+- **MongoDB Atlas** - Base de datos en la nube
+
+## 🏗️ Arquitectura del Sistema
+┌─────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│ Frontend │ │ Backend │ │ Base de Datos │
+│ (React) │◄──►│ (Flask API) │◄──►│ (MongoDB) │
+│ Netlify │ │ Railway │ │ Atlas │
+└─────────────────┘ └──────────────────┘ └──────────────────┘
+│ │ │
+▼ ▼ ▼
+┌─────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│ Notificaciones │ │ Autenticación │ │ Colecciones │
+│ (Email/SMS) │ │ (JWT) │ │ - users │
+└─────────────────┘ └──────────────────┘ │ - classes │
+│ - instructors │
+│ - schedules │
+│ - bookings │
+└──────────────────┘
+
 
 
 1
@@ -161,222 +121,117 @@ Arquitectura Multi-Platform Completa
 38
 39
 40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
+
+## 🚀 Funcionalidades Principales
+
+### Usuarios
+- Registro e inicio de sesión
+- Perfiles personalizados por rol
+- Gestión de reservas
+- Historial de clases
+
+### Clases
+- Catálogo de clases disponibles
+- Horarios y disponibilidad
+- Detalles de cada clase
+- Precios y capacidades
+
+### Instructores
+- Perfiles con biografías
+- Calificaciones y reseñas
+- Clases asignadas
+- Disponibilidad
+
+### Reservas
+- Sistema de reservas en línea
+- Confirmación automática
+- Cancelación de reservas
+- Lista de espera para clases llenas
+
+### Notificaciones
+- Email y SMS para confirmaciones
+- Recordatorios automáticos
+- Notificaciones de cambios
+
+### Administración
+- Panel de control
+- Gestión de usuarios
+- Gestión de clases e instructores
+- Reportes y estadísticas
+
+## 📁 Estructura del Proyecto
+
 fitnessclub/
-├── backend/                    # Python API (Común para Web y Mobile)
-│   ├── app/
-│   │   ├── api/               # Endpoints REST
-│   │   │   ├── v1/
-│   │   │   │   ├── auth.py          # Autenticación
-│   │   │   │   ├── users.py         # Gestión de usuarios
-│   │   │   │   ├── classes.py       # Clases y horarios
-│   │   │   │   ├── instructors.py   # Instructores
-│   │   │   │   ├── bookings.py      # Reservas
-│   │   │   │   └── payments.py      # Pagos
-│   │   │   └── deps.py         # Dependencias
-│   │   ├── core/              # Configuración y seguridad
-│   │   │   ├── config.py
-│   │   │   ├── security.py
-│   │   │   └── database.py
-│   │   ├── models/            # Modelos de MongoDB
-│   │   │   ├── user.py
-│   │   │   ├── class.py
-│   │   │   ├── instructor.py
-│   │   │   ├── schedule.py
-│   │   │   └── booking.py
-│   │   ├── schemas/           # Pydantic schemas
-│   │   │   ├── user.py
-│   │   │   ├── class.py
-│   │   │   ├── booking.py
-│   │   │   └── auth.py
-│   │   ├── services/          # Lógica de negocio
-│   │   │   ├── auth_service.py
-│   │   │   ├── booking_service.py
-│   │   │   └── notification_service.py
-│   │   └── main.py            # Punto de entrada
-│   ├── tests/                 # Tests unitarios
-│   ├── requirements.txt       # Dependencias
-│   ├── .env.example
-│   └── Dockerfile
-├── frontend/                  # Web App (React)
-│   ├── public/
-│   ├── src/
-│   │   ├── components/        # Componentes reutilizables
-│   │   │   ├── common/              # Botones, inputs, etc.
-│   │   │   ├── layout/              # Header, footer, sidebar
-│   │   │   └── features/            # Componentes específicos
-│   │   ├── pages/             # Páginas de la app
-│   │   │   ├── Home/
-│   │   │   ├── Classes/
-│   │   │   ├── Schedule/
-│   │   │   ├── Profile/
-│   │   │   └── Booking/
-│   │   ├── hooks/             # Custom hooks
-│   │   ├── services/          # API calls
-│   │   ├── contexts/          # React contexts
-│   │   ├── utils/             # Funciones auxiliares
-│   │   ├── routes/            # Configuración de rutas
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── package.json
-│   └── .env.example
-├── mobile/                    # Mobile App (React Native)
-│   ├── src/
-│   │   ├── components/        # Componentes reutilizables
-│   │   │   ├── common/              # Botones, inputs móviles
-│   │   │   └── features/            # Componentes específicos móviles
-│   │   ├── screens/           # Pantallas de la app
-│   │   │   ├── HomeScreen/
-│   │   │   ├── ClassesScreen/
-│   │   │   ├── ScheduleScreen/
-│   │   │   ├── ProfileScreen/
-│   │   │   └── BookingScreen/
-│   │   ├── navigation/        # Navegación móvil
-│   │   ├── hooks/             # Custom hooks móviles
-│   │   ├── services/          # API calls (compartido con web)
-│   │   ├── contexts/          # React contexts
-│   │   ├── utils/             # Funciones auxiliares
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── package.json
-│   └── .env.example
-├── shared/                    # Código compartido
-│   ├── types/                 # Tipos TypeScript compartidos
-│   ├── utils/                 # Funciones utilitarias compartidas
-│   └── constants/             # Constantes compartidas
-├── docs/                      # Documentación
-├── docker-compose.yml         # Orquestación de servicios
-├── README.md
-└── .gitignore
-🚀 Tecnologías por Capa
-Backend (Python/FastAPI)
-FastAPI - Framework web moderno y rápido
-Motor - Driver asíncrono para MongoDB
-Pydantic - Validación de datos
-Uvicorn - Servidor ASGI
-JWT - Autenticación
-Passlib - Hash de contraseñas
-Stripe - Procesamiento de pagos
-Frontend Web (React)
-React 18 - Librería principal
-React Router - Navegación
-Axios - HTTP client
-TailwindCSS - Estilos
-React Query - Gestión de estado asíncrono
-Formik + Yup - Formularios y validación
-Mobile App (React Native)
-React Native - Framework móvil
-React Navigation - Navegación móvil
-NativeBase - Componentes UI móviles
-Axios - HTTP client (compartido)
-Async Storage - Almacenamiento local
+├── backend/ # API en Python/Flask
+│ ├── app/
+│ │ ├── init.py
+│ │ ├── main.py # Punto de entrada de la aplicación
+│ │ ├── core/ # Configuración y seguridad
+│ │ │ ├── init.py
+│ │ │ ├── config.py
+│ │ │ ├── database.py
+│ │ │ ├── security.py
+│ │ │ └── auth_middleware.py
+│ │ ├── models/ # Modelos de datos
+│ │ │ ├── init.py
+│ │ │ ├── user.py
+│ │ │ ├── class.py
+│ │ │ ├── instructor.py
+│ │ │ ├── schedule.py
+│ │ │ └── booking.py
+│ │ ├── schemas/ # Validación de datos
+│ │ │ ├── init.py
+│ │ │ └── auth.py
+│ │ ├── services/ # Lógica de negocio
+│ │ │ ├── init.py
+│ │ │ ├── user_service.py
+│ │ │ ├── class_service.py
+│ │ │ ├── instructor_service.py
+│ │ │ ├── schedule_service.py
+│ │ │ └── booking_service.py
+│ │ └── api/ # Endpoints REST
+│ │ └── v1/
+│ │ ├── init.py
+│ │ ├── auth.py
+│ │ ├── users.py
+│ │ ├── classes.py
+│ │ ├── instructors.py
+│ │ └── bookings.py
+│ ├── requirements.txt # Dependencias de Python
+│ ├── Dockerfile # Configuración de Docker
+│ └── .env.example # Variables de entorno de ejemplo
+├── frontend/ # Aplicación React
+│ ├── public/
+│ ├── src/
+│ │ ├── components/ # Componentes reutilizables
+│ │ │ ├── common/ # Componentes comunes
+│ │ │ ├── auth/ # Componentes de autenticación
+│ │ │ ├── classes/ # Componentes de clases
+│ │ │ ├── instructors/ # Componentes de instructores
+│ │ │ ├── bookings/ # Componentes de reservas
+│ │ │ └── reviews/ # Componentes de reseñas
+│ │ ├── pages/ # Páginas de la aplicación
+│ │ ├── services/ # Servicios API
+│ │ ├── contexts/ # Contextos de React
+│ │ ├── hooks/ # Hooks personalizados
+│ │ └── utils/ # Utilidades
+│ ├── package.json
+│ └── .env.example
+└── README.md
 
 
-🔧 Características Clave de la Arquitectura
-1. Backend Unificado
-python
-# Un solo backend para ambas plataformas
-# Endpoints RESTful compatibles con web y mobile
-GET /api/v1/classes/           # Listado de clases
-POST /api/v1/bookings/         # Reservas
-GET /api/v1/users/profile/     # Perfil de usuario
+## 🛠️ Instalación y Configuración
+
+### Backend (Python/Flask)
+
+1. **Navegar al directorio del backend:**
+   ```bash
+   cd backend
+2. Crear un entorno virtual
+3. python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# o
+venv\Scripts\activate     # Windows
 
 
-2. Código Compartido
-javascript
-// shared/services/api.js (compartido entre web y mobile)
-export const api = {
-  getClasses: () => axios.get('/api/v1/classes'),
-  bookClass: (data) => axios.post('/api/v1/bookings', data),
-  getUserProfile: () => axios.get('/api/v1/users/profile')
-}
-
-3. Componentes Adaptativos
-javascript
-// Componentes que se adaptan a web y mobile
-// shared/components/ResponsiveButton.jsx
-const ResponsiveButton = ({ onPress, title }) => {
-  const isMobile = useIsMobile(); // hook para detectar plataforma
-  
-  if (isMobile) {
-    return <TouchableOpacity onPress={onPress}>
-      <Text>{title}</Text>
-    </TouchableOpacity>
-  }
-  
-  return <button onClick={onPress}>{title}</button>
-}
-
-
-📱 Funcionalidades por Plataforma
-Web App
-✅ Dashboard completo
-✅ Calendario interactivo
-✅ Gestión administrativa
-✅ Reservas detalladas
-✅ Reportes y estadísticas
-Mobile App
-✅ Reservas rápidas
-✅ Notificaciones push
-✅ Escaneo de códigos QR
-✅ Geolocalización de clases
-✅ Perfil offline básico
-Funcionalidades Comunes
-✅ Autenticación unificada
-✅ Sincronización de datos
-✅ Sistema de notificaciones
-✅ Gestión de pagos
-✅ Historial de reservas
-
-
-🎯 Beneficios de Esta Arquitectura
-Single Source of Truth - Un solo backend para todas las plataformas
-Mantenimiento Eficiente - Cambios en un solo lugar
-Experiencia Consistente - Misma lógica de negocio
-Desarrollo Paralelo - Equipos pueden trabajar simultáneamente
-Escalabilidad - Fácil agregar nuevas plataformas (admin, kiosko, etc.)
+Instalar dependencias:
