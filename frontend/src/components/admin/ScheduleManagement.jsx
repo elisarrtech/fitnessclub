@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/ScheduleManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { scheduleAPI, classesAPI, instructorsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ScheduleForm from '../../components/admin/ScheduleForm';
 
 const ScheduleManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [schedules, setSchedules] = useState([]);
   const [classes, setClasses] = useState([]);
   const [instructors, setInstructors] = useState([]);
