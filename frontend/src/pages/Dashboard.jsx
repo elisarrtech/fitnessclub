@@ -20,13 +20,22 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [timeRange, setTimeRange] = useState('week');
 
-  useEffect(() => {
-    const currentUser = user || (true ? { id: 'dev-123', name: 'Dev User', email: 'dev@example.com', role: 'ADMIN' } : null);
-if (!currentUser || currentUser.role !== 'ADMIN') {
-      fetchDashboardData();
-    }
-  }, [user, timeRange]);
+ useEffect(() => {
+  // Para desarrollo: permitir acceso temporal sin autenticación
+  const isDevelopmentMode = true; // Cambiar a false en producción
+  const mockUser = {
+    id: 'mock-admin-123',
+    name: 'Usuario de Prueba',
+    email: 'test@example.com',
+    role: 'ADMIN'
+  };
 
+  const currentUser = user || (isDevelopmentMode ? mockUser : null);
+  
+  if (currentUser && currentUser.role === 'ADMIN') {
+    fetchDashboardData();
+  }
+}, [user, timeRange]);
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
