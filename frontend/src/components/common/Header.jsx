@@ -29,9 +29,6 @@ const Header = () => {
               {isAuthenticated ? (
                 <>
                   <li>
-                    <Link to="/schedule" className="hover:text-blue-200">Horarios</Link>
-                  </li>
-                  <li>
                     <Link to="/my-bookings" className="hover:text-blue-200">Mis Reservas</Link>
                   </li>
                   <li>
