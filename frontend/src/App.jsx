@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (actualizado)
+// frontend/src/App.jsx (completado)
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
@@ -31,4 +31,57 @@ function App() {
   }, []);
 
   return (
-    <
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-100">
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/instructor-register" element={<InstructorRegister />} />
+              <Route path="/admin-register" element={<AdminRegister />} />
+              
+              {/* Rutas protegidas para usuarios autenticados */}
+              <Route 
+                path="/profile" 
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="/instructors" element={<Instructors />} />
+              <Route path="/classes" element={<Classes />} />
+              <Route path="/classes/:id" element={<ClassDetail />} />
+              <Route path="/schedule" element={<Schedule />} />
+              
+              {/* Rutas protegidas para usuarios con reservas */}
+              <Route 
+                path="/my-bookings" 
+                element={
+                  <ProtectedRoute>
+                    <MyBookings />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Rutas protegidas solo para administradores */}
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
