@@ -19,6 +19,11 @@ import Dashboard from './pages/Dashboard';
 import ClassManagement from './pages/admin/ClassManagement';
 import InstructorManagement from './pages/admin/InstructorManagement';
 import UserManagement from './pages/admin/UserManagement';
+import ScheduleManagement from './pages/admin/ScheduleManagement';
+import PaymentsManagement from './pages/admin/PaymentsManagement';
+import BulkNotifications from './pages/admin/BulkNotifications';
+import AuditLog from './pages/admin/AuditLog';
+import MembershipsManagement from './pages/admin/MembershipsManagement';
 import './App.css';
 
 function App() {
@@ -89,6 +94,46 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole="ADMIN">
                     <UserManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/schedules" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <ScheduleManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/payments" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <PaymentsManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/notifications" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <BulkNotifications />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/audit" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <AuditLog />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/memberships" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <MembershipsManagement />
                   </ProtectedRoute>
                 } 
               />
