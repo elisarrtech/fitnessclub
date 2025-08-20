@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Verificar si hay un usuario en localStorage
@@ -13,7 +14,9 @@ export const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem('user');
     
     if (token && userData) {
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      setIsAuthenticated(true);
     }
     setLoading(false);
   }, []);
@@ -22,12 +25,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
+    setIsAuthenticated(false);
   };
 
   const value = {
@@ -35,6 +40,10 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
+    isAuthenticated,
+    isAdmin: user?.role === 'ADMIN',
+    isInstructor: user?.role === 'INSTRUCTOR',
+    isUser: user?.role === 'USER'
   };
 
   return (
