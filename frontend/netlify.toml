@@ -1,0 +1,13 @@
+# frontend/netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+  base = "/"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
