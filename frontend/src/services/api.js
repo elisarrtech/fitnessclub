@@ -1,4 +1,4 @@
-// frontend/src/services/api.js (actualizado)
+// frontend/src/services/api.js
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/constants';
 
@@ -37,9 +37,6 @@ export const bookingsAPI = {
   getMyBookings: () => api.get('/api/v1/bookings/my-bookings'),
   cancel: (bookingId) => api.post(`/api/v1/bookings/${bookingId}/cancel`),
   getBySchedule: (scheduleId) => api.get(`/api/v1/bookings/schedule/${scheduleId}`),
-  // Nueva función para lista de espera
-  joinWaitlist: (waitlistData) => api.post('/api/v1/bookings/waitlist', waitlistData),
-  getWaitlist: (scheduleId) => api.get(`/api/v1/bookings/waitlist/${scheduleId}`),
 };
 
 // Funciones de instructores
@@ -48,7 +45,15 @@ export const instructorsAPI = {
   getById: (id) => api.get(`/api/v1/instructors/${id}`),
 };
 
-// Agregar al final de api.js
+// Funciones de usuarios
+export const usersAPI = {
+  getAll: () => api.get('/api/v1/users'),
+  getById: (id) => api.get(`/api/v1/users/${id}`),
+  getMe: () => api.get('/api/v1/users/me'),
+  update: (userData) => api.put('/api/v1/users/me', userData),
+};
+
+// Funciones de horarios
 export const scheduleAPI = {
   getAll: () => api.get('/api/v1/schedules'),
   getById: (id) => api.get(`/api/v1/schedules/${id}`),
@@ -58,13 +63,7 @@ export const scheduleAPI = {
   getByClass: (classId) => api.get(`/api/v1/schedules/class/${classId}`),
 };
 
-export const usersAPI = {
-  getAll: () => api.get('/api/v1/users'),
-  getById: (id) => api.get(`/api/v1/users/${id}`),
-  getMe: () => api.get('/api/v1/users/me'),
-  update: (userData) => api.put('/api/v1/users/me', userData),
-};
-
+// Funciones de pagos
 export const paymentsAPI = {
   getAll: () => api.get('/api/v1/payments'),
   getById: (id) => api.get(`/api/v1/payments/${id}`),
@@ -76,7 +75,7 @@ export const paymentsAPI = {
   processPayment: (paymentData) => api.post('/api/v1/payments/process', paymentData),
 };
 
-// Agregar al final de api.js
+// Funciones de notificaciones masivas
 export const bulkNotificationsAPI = {
   sendBulk: (notificationData) => api.post('/api/v1/notifications/bulk', notificationData),
   getRecent: () => api.get('/api/v1/notifications/recent'),
