@@ -1,3 +1,4 @@
+// frontend/src/hooks/useAuth.js
 import { useState, useEffect, createContext, useContext } from 'react';
 
 const AuthContext = createContext();
