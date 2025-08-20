@@ -19,7 +19,7 @@ import Dashboard from './pages/Dashboard';
 import ClassManagement from './pages/admin/ClassManagement';
 import InstructorManagement from './pages/admin/InstructorManagement';
 import UserManagement from './pages/admin/UserManagement';
-import ScheduleManagement from './pages/admin/ScheduleManagement';
+import ScheduleManagement from './components/admin/ScheduleManagement';
 import PaymentsManagement from './pages/admin/PaymentsManagement';
 import BulkNotifications from './pages/admin/BulkNotifications';
 import AuditLog from './pages/admin/AuditLog';
