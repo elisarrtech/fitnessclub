@@ -7,7 +7,7 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     try:
         data = request.get_json()
-        if not 
+        if not data:  # Esta línea estaba mal
             return jsonify({"error": "No data provided"}), 400
         
         result = register_user(data)
@@ -21,7 +21,7 @@ def register():
 def login():
     try:
         data = request.get_json()
-        if not 
+        if not data:  # Esta línea estaba mal
             return jsonify({"error": "No data provided"}), 400
             
         result = login_user(data)
