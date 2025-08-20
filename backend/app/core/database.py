@@ -9,14 +9,18 @@ try:
     # Usar la URL completa de MongoDB Atlas desde las variables de entorno
     MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:S5B%25%23-kGjj%21%25KJn@cluster0.yjot3u0.mongodb.net/fitnessclubdb?retryWrites=true&w=majority&appName=Cluster0")
     
-    # Configuración MÍNIMA para evitar problemas en Railway
+    # Configuración optimizada para evitar problemas de SSL en Railway
     client = MongoClient(
         MONGODB_URI,
         tls=True,
-        tlsAllowInvalidCertificates=True,  # Permitir certificados inválidos (solo para Railway)
+        tlsAllowInvalidCertificates=True,
         serverSelectionTimeoutMS=5000,
         connectTimeoutMS=5000,
-        socketTimeoutMS=5000
+        socketTimeoutMS=5000,
+        maxPoolSize=1,  # Reducir el pool size
+        retryWrites=False,  # Desactivar retryWrites temporalmente
+        retryReads=False,   # Desactivar retryReads temporalmente
+        directConnection=False
     )
     
     # Obtener nombre de base de datos
@@ -32,12 +36,10 @@ try:
 
     def init_db():
         try:
-            # Verificar conexión (sin usar ping que puede fallar)
-            # Solo verificar que el cliente se creó correctamente
-            print("✅ Cliente MongoDB creado")
+            print("✅ Cliente MongoDB configurado")
             print(f"✅ Base de datos: {db_name}")
         except Exception as e:
-            print(f"⚠️ Error inicializando MongoDB: {e}")
+            print(f"⚠️ Error en configuración MongoDB: {e}")
 
     def serialize_mongo_id(obj):
         if obj and "_id" in obj:
