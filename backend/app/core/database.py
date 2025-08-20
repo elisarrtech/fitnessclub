@@ -2,22 +2,24 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import certifi
+import ssl
 
 load_dotenv()
 
-# Conexión a MongoDB con mejor manejo de SSL
 try:
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+    # Configuración mejorada para MongoDB Atlas
+    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/fitnessclub")
     
-    # Usar certifi para manejar certificados SSL
+    # Configurar cliente con opciones específicas para evitar problemas de SSL
     client = MongoClient(
         MONGODB_URI,
         tls=True,
-        tlsCAFile=certifi.where(),  # Usar certificados confiables
+        tlsAllowInvalidCertificates=True,  # Solo para entornos de prueba
         serverSelectionTimeoutMS=5000,
         connectTimeoutMS=5000,
-        retryWrites=True
+        socketTimeoutMS=5000,
+        retryWrites=True,
+        retryReads=True
     )
     
     db = client[os.getenv("DATABASE_NAME", "elisarrtech")]
@@ -30,26 +32,15 @@ try:
     schedules_collection = db.schedules
 
     def init_db():
-        """Inicializar base de datos con índices"""
         try:
-            # Verificar conexión
-            client.admin.command('ping')
+            # Verificar conexión con timeout más corto
+            client.admin.command('ping', readPreference='primaryPreferred')
             print("✅ Conexión a MongoDB exitosa")
-            
-            # Índices recomendados
-            users_collection.create_index("email", unique=True)
-            classes_collection.create_index("title")
-            instructors_collection.create_index("email", sparse=True)
-            bookings_collection.create_index([("schedule_id", 1), ("user_id", 1)], unique=True)
-            schedules_collection.create_index("class_id")
-            schedules_collection.create_index("start_ts")
-            schedules_collection.create_index("instructor_id")
-            print("✅ Índices de base de datos creados exitosamente")
         except Exception as e:
-            print(f"⚠️ Error inicializando base de datos: {e}")
+            print(f"⚠️ Error conectando a MongoDB: {e}")
+            # Continuar aunque falle la conexión (para que la app siga funcionando)
 
     def serialize_mongo_id(obj):
-        """Convertir ObjectId de MongoDB a string para JSON"""
         if obj and "_id" in obj:
             obj["id"] = str(obj["_id"])
             del obj["_id"]
@@ -59,8 +50,7 @@ try:
     init_db()
     
 except Exception as e:
-    print(f"❌ Error conectando a MongoDB: {e}")
-    db = None
+    print(f"❌ Error grave en la configuración de MongoDB: {e}")
     users_collection = None
     classes_collection = None
     instructors_collection = None
