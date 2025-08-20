@@ -9,7 +9,7 @@ def create_app():
     
     # Configurar CORS - Permite solicitudes desde tu frontend Netlify
     CORS(app, origins=[
-        "https://tu-frontend-netlify-url.netlify.app",  # Reemplaza con tu URL real
+        "https://68a53b5ad44d4ea56a6cb0c3--fitnessclubfront.netlify.app/",  # Reemplaza con tu URL real
         "http://localhost:3000",  # Para desarrollo local
         "http://localhost:5173"   # Para Vite dev server
     ])
