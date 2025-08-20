@@ -2,6 +2,7 @@
 import os
 from flask import Flask, jsonify
 from flask_cors import CORS
+from app.api.v1 import auth, users, classes, instructors, bookings
 
 def create_app():
     app = Flask(__name__)
