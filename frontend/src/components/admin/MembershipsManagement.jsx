@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { membershipsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
-import MembershipForm from '../../components/admin/MembershipForm';
+import MembershipForm from './MembershipForm'; 
 
 const MembershipsManagement = () => {
   const { user } = useAuth();
