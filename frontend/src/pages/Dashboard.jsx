@@ -1,4 +1,3 @@
-// frontend/src/pages/Dashboard.jsx (fragmento actualizado)
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { classesAPI, bookingsAPI, usersAPI, instructorsAPI } from '../services/api';
@@ -20,20 +19,25 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [timeRange, setTimeRange] = useState('week');
 
-useEffect(() => {
-  if (user && user.role === 'ADMIN') {
-    fetchDashboardData();
-  }
-}, [user, timeRange]);
+  useEffect(() => {
+    // Para desarrollo: permitir acceso temporal sin autenticación
+    const isDevelopmentMode = true; // Cambiar a false en producción
+    const mockUser = {
+      id: 'mock-admin-123',
+      name: 'Usuario de Prueba',
+      email: 'test@example.com',
+      role: 'ADMIN'
+    };
 
+    const currentUser = user || (isDevelopmentMode ? mockUser : null);
+    
+    if (currentUser && currentUser.role === 'ADMIN') {
+      fetchDashboardData();
+    }
+  }, [user, timeRange]);
 
-  const currentUser = user || (isDevelopmentMode ? mockUser : null);
-  
-  if (currentUser && currentUser.role === 'ADMIN') {
-    fetchDashboardData();
-  }
-}, [user, timeRange]);
   const fetchDashboardData = async () => {
+
     try {
       setLoading(true);
       
@@ -100,15 +104,32 @@ useEffect(() => {
     }
   };
 
-  if (!user || user.role !== 'ADMIN') {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-700">Acceso denegado. Solo administradores pueden acceder a esta página.</p>
-        </div>
+// POR ESTO:
+const isDevelopmentMode = true; // Cambiar a false en producción
+const mockUser = {
+  id: 'mock-admin-123',
+  name: 'Usuario de Prueba',
+  email: 'test@example.com',
+  role: 'ADMIN'
+};
+
+const currentUser = user || (isDevelopmentMode ? mockUser : null);
+const hasAccess = currentUser && currentUser.role === 'ADMIN';
+
+if (!hasAccess) {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p className="text-red-700">Acceso denegado. Solo administradores pueden acceder a esta página.</p>
+        {isDevelopmentMode && (
+          <p className="text-sm text-gray-600 mt-2">
+            Modo desarrollo activo - usando usuario de prueba
+          </p>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (loading) {
     return <LoadingSpinner />;
