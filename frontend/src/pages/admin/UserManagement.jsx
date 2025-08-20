@@ -1,11 +1,11 @@
 // frontend/src/pages/admin/UserManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import { usersAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const UserManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
