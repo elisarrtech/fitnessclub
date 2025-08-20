@@ -24,7 +24,19 @@ def create_app():
             "service": "fitness-api-python",
             "version": "1.0.0"
         })
-    
+        
+    # Registrar blueprints
+    try:
+        from app.api.v1 import auth, users, classes, instructors, bookings
+        app.register_blueprint(auth.auth_bp)
+        app.register_blueprint(users.users_bp)
+        app.register_blueprint(classes.classes_bp)  # ← Blueprint de clases
+        app.register_blueprint(instructors.instructors_bp)
+        app.register_blueprint(bookings.bookings_bp)
+        print("✅ Blueprints registrados exitosamente")
+    except Exception as e:
+        print(f"❌ Error registrando blueprints: {e}")
+   
     return app
 
 app = create_app()
