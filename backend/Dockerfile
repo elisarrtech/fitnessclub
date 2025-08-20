@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar código fuente
 COPY . .
 
-# Verificar que los archivos __init__.py existan
+# Asegurar que todos los directorios tengan __init__.py
 RUN find . -type d -exec touch {}/__init__.py \;
 
 # Exponer puerto
