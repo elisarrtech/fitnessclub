@@ -1,5 +1,5 @@
-// frontend/src/App.jsx (completado)
-import React, { useEffect } from 'react';
+// frontend/src/App.jsx (fragmento actualizado)
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -16,20 +16,12 @@ import MyBookings from './pages/MyBookings';
 import InstructorRegister from './pages/InstructorRegister';
 import AdminRegister from './pages/AdminRegister';
 import Dashboard from './pages/Dashboard';
-import reminderService from './services/reminderService';
+import ClassManagement from './pages/admin/ClassManagement';
+import InstructorManagement from './pages/admin/InstructorManagement';
+import UserManagement from './pages/admin/UserManagement';
 import './App.css';
 
 function App() {
-  useEffect(() => {
-    // Iniciar verificación de recordatorios
-    reminderService.startReminderCheck();
-    
-    // Limpiar al desmontar
-    return () => {
-      reminderService.stopReminderCheck();
-    };
-  }, []);
-
   return (
     <AuthProvider>
       <Router>
@@ -73,6 +65,30 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole="ADMIN">
                     <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/classes" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <ClassManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/instructors" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <InstructorManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin/users" 
+                element={
+                  <ProtectedRoute requiredRole="ADMIN">
+                    <UserManagement />
                   </ProtectedRoute>
                 } 
               />
