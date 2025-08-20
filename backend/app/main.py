@@ -3,7 +3,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from app.api.v1.auth.routes import auth_bp
 # Importa otros blueprints cuando los tengas
-# from app.api.v1.dashboard.routes import dashboard_bp
 
 def create_app():
     app = Flask(__name__)
@@ -34,4 +33,4 @@ app = create_app()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port, debug=True)  # debug=True para desarrollo
+    app.run(host="0.0.0.0", port=port, debug=True)
