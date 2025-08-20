@@ -1,6 +1,6 @@
 // frontend/src/pages/admin/PaymentsManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { paymentsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ReportGenerator from '../../components/admin/reports/ReportGenerator';
