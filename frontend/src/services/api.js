@@ -104,4 +104,20 @@ export const auditAPI = {
   getStats: () => api.get('/api/v1/audit/stats'),
 };
 
+export const membershipsAPI = {
+  getAll: () => api.get('/api/v1/memberships'),
+  getById: (id) => api.get(`/api/v1/memberships/${id}`),
+  create: (membershipData) => api.post('/api/v1/memberships', membershipData),
+  update: (id, membershipData) => api.put(`/api/v1/memberships/${id}`, membershipData),
+  delete: (id) => api.delete(`/api/v1/memberships/${id}`),
+  getActive: () => api.get('/api/v1/memberships/active'),
+  getByUser: (userId) => api.get(`/api/v1/memberships/user/${userId}`),
+  renew: (membershipId) => api.post(`/api/v1/memberships/${membershipId}/renew`),
+  cancel: (membershipId) => api.post(`/api/v1/memberships/${membershipId}/cancel`),
+  getPlans: () => api.get('/api/v1/memberships/plans'),
+  createPlan: (planData) => api.post('/api/v1/memberships/plans', planData),
+  updatePlan: (planId, planData) => api.put(`/api/v1/memberships/plans/${planId}`, planData),
+  deletePlan: (planId) => api.delete(`/api/v1/memberships/plans/${planId}`),
+};
+
 export default api;
