@@ -1,6 +1,6 @@
 // frontend/src/pages/admin/InstructorManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { instructorsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import InstructorForm from '../../components/admin/InstructorForm';
