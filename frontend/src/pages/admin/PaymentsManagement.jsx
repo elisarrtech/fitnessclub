@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/PaymentsManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import { paymentsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ReportGenerator from '../../components/admin/reports/ReportGenerator';
 
 const PaymentsManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
