@@ -1,52 +1,63 @@
 // frontend/src/pages/ClassDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { classesAPI } from '../services/api';
+import BookingForm from '../components/bookings/BookingForm';
 
 const ClassDetail = () => {
   const { id } = useParams();
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // Datos de ejemplo - en producción esto vendría de la API
-  const sampleClass = {
-    id: id,
-    title: 'Yoga Vinyasa',
-    modality: 'presencial',
-    level: 'básico',
-    duration_min: 60,
-    base_price: 18000,
-    capacity: 18,
-    description: 'Una clase de yoga dinámica que sincroniza la respiración con el movimiento. Perfecta para principiantes que quieren mejorar su flexibilidad y encontrar equilibrio.',
-    instructor: {
-      id: 1,
-      name: 'Alex Coach',
-      bio: 'Especialista en HIIT y fuerza con más de 10 años de experiencia.',
-      rating: 4.8
-    },
-    schedules: [
-      {
-        id: 1,
-        start_ts: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        end_ts: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
-        room: 'Sala A'
-      },
-      {
-        id: 2,
-        start_ts: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-        end_ts: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000).toISOString(),
-        room: 'Sala B'
-      }
-    ]
-  };
+  const [showBookingForm, setShowBookingForm] = useState(null);
+  const [bookingSuccess, setBookingSuccess] = useState(null);
 
   useEffect(() => {
-    // Simular carga de datos
-    setTimeout(() => {
-      setClassData(sampleClass);
-      setLoading(false);
-    }, 500);
+    fetchClassDetail();
   }, [id]);
+
+  const fetchClassDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await classesAPI.getById(id);
+      setClassData(response.data);
+    } catch (err) {
+      setError('Clase no encontrada');
+      console.error('Error fetching class:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBookClass = (schedule) => {
+    setShowBookingForm(schedule);
+  };
+
+  const handleBookingSuccess = (bookingData) => {
+    setBookingSuccess(bookingData);
+    setShowBookingForm(null);
+    
+    // Recargar los detalles de la clase para actualizar la información
+    fetchClassDetail();
+    
+    // Ocultar mensaje de éxito después de 3 segundos
+    setTimeout(() => {
+      setBookingSuccess(null);
+    }, 3000);
+  };
+
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }) + ' a las ' + date.toLocaleTimeString('es-ES', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
 
   if (loading) {
     return (
@@ -71,11 +82,43 @@ const ClassDetail = () => {
     );
   }
 
+  if (showBookingForm) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="max-w-md w-full">
+          <BookingForm
+            schedule={showBookingForm}
+            classData={classData}
+            onBookingSuccess={handleBookingSuccess}
+            onCancel={() => setShowBookingForm(null)}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Link to="/classes" className="inline-block mb-4 text-blue-600 hover:text-blue-800">
         ← Volver a clases
       </Link>
+      
+      {bookingSuccess && (
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-green-700">
+                <span className="font-medium">¡Reserva confirmada!</span> Tu clase ha sido reservada exitosamente.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-6">
@@ -102,24 +145,28 @@ const ClassDetail = () => {
           <div className="mt-6">
             <h2 className="text-xl font-semibold text-gray-900">Descripción</h2>
             <p className="mt-2 text-gray-600">
-              {classData.description}
+              {classData.description || 'Descripción no disponible'}
             </p>
           </div>
 
           {/* Instructor */}
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold text-gray-900">Instructor</h2>
-            <div className="mt-2 flex items-center">
-              <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12" />
-              <div className="ml-3">
-                <p className="font-medium text-gray-900">{classData.instructor.name}</p>
-                <div className="flex items-center">
-                  <span className="text-yellow-500">★</span>
-                  <span className="ml-1 text-sm text-gray-600">{classData.instructor.rating}</span>
+          {classData.instructor && (
+            <div className="mt-6">
+              <h2 className="text-xl font-semibold text-gray-900">Instructor</h2>
+              <div className="mt-2 flex items-center">
+                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12" />
+                <div className="ml-3">
+                  <p className="font-medium text-gray-900">{classData.instructor.name}</p>
+                  {classData.instructor.rating && (
+                    <div className="flex items-center">
+                      <span className="text-yellow-500">★</span>
+                      <span className="ml-1 text-sm text-gray-600">{classData.instructor.rating}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Horarios disponibles */}
           <div className="mt-6">
@@ -130,12 +177,7 @@ const ClassDetail = () => {
                   <div key={schedule.id} className="flex justify-between items-center p-4 border border-gray-200 rounded-lg">
                     <div>
                       <p className="font-medium text-gray-900">
-                        {new Date(schedule.start_ts).toLocaleDateString('es-ES', { 
-                          weekday: 'long', 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
-                        })}
+                        {formatDateTime(schedule.start_ts)}
                       </p>
                       <p className="text-gray-600">
                         {new Date(schedule.start_ts).toLocaleTimeString('es-ES', { 
@@ -150,7 +192,10 @@ const ClassDetail = () => {
                         <p className="text-sm text-gray-500">Sala: {schedule.room}</p>
                       )}
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
+                    <button 
+                      onClick={() => handleBookClass(schedule)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300"
+                    >
                       Reservar
                     </button>
                   </div>
@@ -166,7 +211,10 @@ const ClassDetail = () => {
               <div>
                 <p className="text-gray-600">Capacidad: {classData.capacity} personas</p>
               </div>
-              <button className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-md transition duration-300">
+              <button 
+                onClick={() => alert('Funcionalidad de reserva general - Implementar en próxima iteración')}
+                className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-md transition duration-300"
+              >
                 Reservar Clase
               </button>
             </div>
