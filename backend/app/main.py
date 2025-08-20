@@ -25,27 +25,10 @@ def create_app():
             "version": "1.0.0"
         })
     
-    # Registrar blueprints con manejo de errores
-    try:
-        print("Intentando importar blueprints...")
-        from app.api.v1 import auth, users, classes, instructors, bookings
-        print("✅ Blueprints importados exitosamente")
-        
-        app.register_blueprint(auth.auth_bp)
-        app.register_blueprint(users.users_bp)
-        app.register_blueprint(classes.classes_bp)
-        app.register_blueprint(instructors.instructors_bp)
-        app.register_blueprint(bookings.bookings_bp)
-        print("✅ Blueprints registrados exitosamente")
-        
-    except ImportError as e:
-        print(f"❌ Error importando blueprints: {e}")
-        import traceback
-        traceback.print_exc()
-    except Exception as e:
-        print(f"❌ Error registrando blueprints: {e}")
-        import traceback
-        traceback.print_exc()
+    # Endpoint de prueba para verificar que las rutas básicas funcionan
+    @app.route("/api/v1/test")
+    def test_route():
+        return jsonify({"message": "Test route working"})
     
     return app
 
