@@ -1,12 +1,12 @@
 // frontend/src/pages/admin/InstructorManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import { instructorsAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import InstructorForm from '../../components/admin/InstructorForm';
 
 const InstructorManagement = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
