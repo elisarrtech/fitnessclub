@@ -1,9 +1,13 @@
 # app/core/database.py
+from flask_cors import CORS
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
 from typing import Optional, Any, Dict
+
+# Configurar CORS
+CORS(app, origins=["https://your-frontend-url.netlify.app"])
 
 load_dotenv()
 
