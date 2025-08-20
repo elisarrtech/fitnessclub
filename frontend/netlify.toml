@@ -1,11 +1,15 @@
-# frontend/netlify.toml
+# netlify.toml
 [build]
   command = "npm run build"
   publish = "dist"
-  base = "frontend"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
+[cache]
+  # Evita la caché de archivos estáticos
+  public = true
+  # Tiempo de vida de los archivos (en segundos)
+  ttl = 600
