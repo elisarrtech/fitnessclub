@@ -1,7 +1,7 @@
 // frontend/src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 import { authAPI } from '../services/api';
 
 const Login = () => {
@@ -12,7 +12,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { login } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
