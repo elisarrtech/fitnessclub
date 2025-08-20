@@ -65,7 +65,6 @@ export const usersAPI = {
   update: (userData) => api.put('/api/v1/users/me', userData),
 };
 
-// Agregar al final de api.js
 export const paymentsAPI = {
   getAll: () => api.get('/api/v1/payments'),
   getById: (id) => api.get(`/api/v1/payments/${id}`),
@@ -77,5 +76,13 @@ export const paymentsAPI = {
   processPayment: (paymentData) => api.post('/api/v1/payments/process', paymentData),
 };
 
-export default api;
+// Agregar al final de api.js
+export const bulkNotificationsAPI = {
+  sendBulk: (notificationData) => api.post('/api/v1/notifications/bulk', notificationData),
+  getRecent: () => api.get('/api/v1/notifications/recent'),
+  getAll: () => api.get('/api/v1/notifications'),
+  getById: (id) => api.get(`/api/v1/notifications/${id}`),
+  delete: (id) => api.delete(`/api/v1/notifications/${id}`),
+};
 
+export default api;
