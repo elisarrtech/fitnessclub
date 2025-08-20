@@ -48,4 +48,13 @@ export const instructorsAPI = {
   getById: (id) => api.get(`/api/v1/instructors/${id}`),
 };
 
+// ¡FALTA ESTO! - Agregar usersAPI
+export const usersAPI = {
+  getAll: () => api.get('/api/v1/users'),
+  getById: (id) => api.get(`/api/v1/users/${id}`),
+  getMe: () => api.get('/api/v1/users/me'),
+  update: (userData) => api.put('/api/v1/users/me', userData),
+};
+
+
 export default api;
