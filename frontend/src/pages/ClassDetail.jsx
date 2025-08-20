@@ -112,4 +112,11 @@ const ClassDetail = () => {
             <div className="mt-2 flex items-center">
               <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12" />
               <div className="ml-3">
-                <p className="font-medium text-gray-900">{classData.instructor
+                <p className="font-medium text-gray-900">{classData.instructor.name}</p>
+                <div className="flex items-center">
+                  <span className="text-yellow-500">★</span>
+                  <span className="ml-1 text-sm text-gray-600">{classData.instructor.rating}</span>
+                </div>
+            </div>
+          </div>
+        </div>
