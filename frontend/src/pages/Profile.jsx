@@ -1,6 +1,6 @@
 // frontend/src/pages/Profile.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Profile = () => {
   const { user, logout } = useAuth();
