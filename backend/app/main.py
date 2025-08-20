@@ -1,19 +1,15 @@
 import os
 from flask import Flask, jsonify
 from flask_cors import CORS
-from app.api.v1.auth.routes import auth_bp
+from app.api.v1.auth import auth_bp
 # Importa otros blueprints cuando los tengas
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
     
-    # Configuración
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
-    
     # Registrar blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
-    # app.register_blueprint(dashboard_bp, url_prefix='/api/v1/dashboard')
     
     @app.route("/")
     def root():
