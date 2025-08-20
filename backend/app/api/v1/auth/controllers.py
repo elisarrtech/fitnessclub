@@ -5,6 +5,10 @@ from app.models.user import UserCreate
 import traceback
 
 def register_user(data):
+    # Verificar que la conexión a MongoDB esté disponible
+    if users_collection is None:
+        raise Exception("Database connection failed")
+    
     try:
         print("=== REGISTER USER ===")
         print(f"Input data: {data}")
@@ -68,6 +72,10 @@ def register_user(data):
         raise
 
 def login_user(data):
+    # Verificar que la conexión a MongoDB esté disponible
+    if users_collection is None:
+        raise Exception("Database connection failed")
+    
     try:
         print("=== LOGIN USER ===")
         print(f"Input data: {data}")
