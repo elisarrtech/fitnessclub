@@ -1,7 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from app.core.database import users_collection
 from app.core.security import hash_password, verify_password, create_access_token
-from app.models.user import UserCreate, Role
+from app.models.user import UserCreate
+from bson import ObjectId
 
 def register_user(data):
     # Validar datos
@@ -16,24 +17,23 @@ def register_user(data):
     hashed_password = hash_password(user_data.password)
     
     # Preparar datos para MongoDB
-    user_dict = user_data.model_dump()
-    user_dict['password'] = hashed_password
-    user_dict['created_at'] = user_dict['updated_at'] = None  # Se seteará en DB
+    user_doc = {
+        "email": user_data.email,
+        "name": user_data.name,
+        "phone": user_data.phone,
+        "role": user_data.role,
+        "password": hashed_password,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
     
     # Insertar en base de datos
-    result = users_collection.insert_one({
-        "email": user_dict['email'],
-        "name": user_dict.get('name'),
-        "phone": user_dict.get('phone'),
-        "role": user_dict['role'],
-        "password": user_dict['password'],
-        "created_at": "$$NOW",
-        "updated_at": "$$NOW"
-    })
+    result = users_collection.insert_one(user_doc)
+    user_id = str(result.inserted_id)
     
     # Crear token
     access_token = create_access_token(
-        data={"sub": str(result.inserted_id), "role": user_dict['role']},
+        data={"sub": user_id, "role": user_data.role},
         expires_delta=timedelta(days=1)
     )
     
@@ -41,10 +41,10 @@ def register_user(data):
         "access_token": access_token,
         "token_type": "bearer",
         "user": {
-            "id": str(result.inserted_id),
-            "email": user_dict['email'],
-            "name": user_dict.get('name'),
-            "role": user_dict['role']
+            "id": user_id,
+            "email": user_data.email,
+            "name": user_data.name,
+            "role": user_data.role
         }
     }
 
@@ -64,9 +64,11 @@ def login_user(data):
     if not verify_password(password, user['password']):
         raise ValueError("Invalid credentials")
     
+    user_id = str(user['_id'])
+    
     # Crear token
     access_token = create_access_token(
-        data={"sub": str(user['_id']), "role": user['role']},
+        data={"sub": user_id, "role": user['role']},
         expires_delta=timedelta(days=1)
     )
     
@@ -74,7 +76,7 @@ def login_user(data):
         "access_token": access_token,
         "token_type": "bearer",
         "user": {
-            "id": str(user['_id']),
+            "id": user_id,
             "email": user['email'],
             "name": user.get('name'),
             "role": user['role']
@@ -83,7 +85,14 @@ def login_user(data):
 
 def get_current_user(token_payload):
     user_id = token_payload.get("sub")
-    user = users_collection.find_one({"_id": user_id})
+    
+    if not user_id:
+        raise ValueError("Invalid token")
+    
+    try:
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+    except Exception:
+        raise ValueError("User not found")
     
     if not user:
         raise ValueError("User not found")
