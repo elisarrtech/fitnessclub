@@ -1,8 +1,9 @@
-// frontend/src/pages/Dashboard.jsx
+// frontend/src/pages/Dashboard.jsx (fragmento actualizado)
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { classesAPI, bookingsAPI, usersAPI, instructorsAPI } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import DashboardCharts from '../components/admin/charts/DashboardCharts';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -14,38 +15,22 @@ const Dashboard = () => {
     revenue: 0,
     occupancy: 0
   });
+  const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [timeRange, setTimeRange] = useState('week'); // week, month, year
+  const [timeRange, setTimeRange] = useState('week');
 
   useEffect(() => {
     if (user && user.role === 'ADMIN') {
-      fetchDashboardStats();
+      fetchDashboardData();
     }
   }, [user, timeRange]);
 
-  const fetchDashboardStats = async () => {
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
       
-      // En producción, aquí harías llamadas reales a la API
-      // Por ahora, simulamos datos
-      
-      // Simular datos de ejemplo
-      setTimeout(() => {
-        setStats({
-          users: 150,
-          classes: 24,
-          instructors: 8,
-          bookings: 32,
-          revenue: 2450,
-          occupancy: 78
-        });
-        setLoading(false);
-      }, 1000);
-      
-      /*
-      // En producción, usarías estas llamadas reales:
+      // Obtener estadísticas
       const [usersRes, classesRes, instructorsRes, bookingsRes] = await Promise.all([
         usersAPI.getAll(),
         classesAPI.getAll(),
@@ -53,34 +38,59 @@ const Dashboard = () => {
         bookingsAPI.getRecentBookings(timeRange)
       ]);
       
+      const revenue = bookingsRes.data.reduce((total, booking) => {
+        return total + (booking.class?.base_price || 0);
+      }, 0) / 100;
+      
+      const totalCapacity = bookingsRes.data.reduce((total, booking) => {
+        return total + (booking.schedule?.class?.capacity || 0);
+      }, 0);
+      
+      const occupancy = totalCapacity > 0 ? Math.round((bookingsRes.data.length / totalCapacity) * 100) : 0;
+      
       setStats({
         users: usersRes.data.length,
         classes: classesRes.data.length,
         instructors: instructorsRes.data.length,
         bookings: bookingsRes.data.length,
-        revenue: calculateRevenue(bookingsRes.data),
-        occupancy: calculateOccupancy(bookingsRes.data)
+        revenue: revenue,
+        occupancy: occupancy
       });
-      */
+      
+      // Datos para gráficos (simulados)
+      setChartData({
+        bookingsByDay: [
+          { day: 'Lun', count: 12 },
+          { day: 'Mar', count: 19 },
+          { day: 'Mié', count: 3 },
+          { day: 'Jue', count: 5 },
+          { day: 'Vie', count: 2 },
+          { day: 'Sáb', count: 3 },
+          { day: 'Dom', count: 15 }
+        ],
+        classesPopularity: [
+          { className: 'Yoga', bookings: 45 },
+          { className: 'HIIT', bookings: 32 },
+          { className: 'Pilates', bookings: 28 },
+          { className: 'Spinning', bookings: 21 },
+          { className: 'CrossFit', bookings: 18 },
+          { className: 'Zumba', bookings: 15 }
+        ],
+        revenueByMonth: [
+          { month: 'Ene', revenue: 12500 },
+          { month: 'Feb', revenue: 15200 },
+          { month: 'Mar', revenue: 18900 },
+          { month: 'Abr', revenue: 21500 },
+          { month: 'May', revenue: 24800 },
+          { month: 'Jun', revenue: 27300 }
+        ]
+      });
     } catch (err) {
       setError('Error al cargar las estadísticas');
-      console.error('Error fetching dashboard stats:', err);
+      console.error('Error fetching dashboard data:', err);
+    } finally {
       setLoading(false);
     }
-  };
-
-  const calculateRevenue = (bookings) => {
-    return bookings.reduce((total, booking) => {
-      return total + (booking.class?.base_price || 0);
-    }, 0) / 100; // Convertir de centavos a dólares
-  };
-
-  const calculateOccupancy = (bookings) => {
-    if (bookings.length === 0) return 0;
-    const totalCapacity = bookings.reduce((total, booking) => {
-      return total + (booking.schedule?.class?.capacity || 0);
-    }, 0);
-    return totalCapacity > 0 ? Math.round((bookings.length / totalCapacity) * 100) : 0;
   };
 
   if (!user || user.role !== 'ADMIN') {
@@ -103,7 +113,7 @@ const Dashboard = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-700">{error}</p>
           <button
-            onClick={fetchDashboardStats}
+            onClick={fetchDashboardData}
             className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Reintentar
@@ -184,22 +194,8 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Gráficos y reportes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Reservas por Día</h2>
-          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-            <p className="text-gray-500">Gráfico de reservas por día - Implementar con Chart.js o similar</p>
-          </div>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Clases Populares</h2>
-          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-            <p className="text-gray-500">Gráfico de clases más populares - Implementar con Chart.js o similar</p>
-          </div>
-        </div>
-      </div>
+      {/* Gráficos */}
+      {chartData && <DashboardCharts data={chartData} />}
 
       {/* Acciones rápidas */}
       <div className="mt-8">
