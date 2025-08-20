@@ -84,7 +84,7 @@ export const bulkNotificationsAPI = {
   delete: (id) => api.delete(`/api/v1/notifications/${id}`),
 };
 
-// Agregar al final de api.js
+
 export const notificationsAPI = {
   sendBulk: (notificationData) => api.post('/api/v1/notifications/bulk', notificationData),
   getAll: () => api.get('/api/v1/notifications'),
@@ -93,6 +93,15 @@ export const notificationsAPI = {
   getRecent: (limit = 10) => api.get(`/api/v1/notifications/recent?limit=${limit}`),
   markAsRead: (id) => api.post(`/api/v1/notifications/${id}/read`),
   markAllAsRead: () => api.post('/api/v1/notifications/read-all'),
+};
+
+export const auditAPI = {
+  getLogs: (filters) => api.get('/api/v1/audit/logs', { params: filters }),
+  getById: (id) => api.get(`/api/v1/audit/logs/${id}`),
+  exportLogs: (format) => api.get(`/api/v1/audit/export/${format}`),
+  getRecent: (limit = 50) => api.get(`/api/v1/audit/logs/recent?limit=${limit}`),
+  search: (query) => api.get(`/api/v1/audit/logs/search?q=${query}`),
+  getStats: () => api.get('/api/v1/audit/stats'),
 };
 
 export default api;
