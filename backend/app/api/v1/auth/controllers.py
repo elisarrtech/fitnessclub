@@ -1,33 +1,40 @@
 import jwt
 import bcrypt
 from datetime import datetime, timedelta
-from app.models.user import UserCreate, User
-from app.database import db
 import os
+from app.core.database import users_collection, serialize_mongo_id
+from app.models.user import UserCreate, Role
 
 def register_user(data):
-    # Verificar si el usuario ya existe
-    existing_user = db.users.find_one({"email": data.get("email")})
-    if existing_user:
-        raise Exception("User already exists")
+    # Validar datos de entrada
+    try:
+        user_data = UserCreate(**data)
+    except Exception as e:
+        raise ValueError(f"Invalid data: {str(e)}")
     
-    # Crear nuevo usuario
-    user_data = UserCreate(**data)
+    # Verificar si el usuario ya existe
+    existing_user = users_collection.find_one({"email": user_data.email})
+    if existing_user:
+        raise ValueError("User already exists")
     
     # Hashear password
-    hashed_password = bcrypt.hashpw(user_data.password.encode('utf-8'), bcrypt.gensalt())
+    hashed_password = bcrypt.hashpw(
+        user_data.password.encode('utf-8'), 
+        bcrypt.gensalt()
+    ).decode('utf-8')
+    
+    # Preparar datos para guardar
+    user_dict = user_data.model_dump()
+    user_dict['password'] = hashed_password
+    user_dict['created_at'] = datetime.utcnow()
+    user_dict['updated_at'] = datetime.utcnow()
     
     # Guardar en DB
-    user_dict = user_data.model_dump()
-    user_dict['password'] = hashed_password.decode('utf-8')
-    user_dict['created_at'] = datetime.now()
-    user_dict['updated_at'] = datetime.now()
-    
-    result = db.users.insert_one(user_dict)
+    result = users_collection.insert_one(user_dict)
     user_dict['id'] = str(result.inserted_id)
     
     # Generar token
-    token = generate_token(str(result.inserted_id), user_data.role)
+    token = generate_token(str(result.inserted_id), user_data.role.value)
     
     return {
         "token": token,
@@ -43,25 +50,34 @@ def login_user(data):
     email = data.get("email")
     password = data.get("password")
     
+    if not email or not password:
+        raise ValueError("Email and password are required")
+    
     # Buscar usuario
-    user = db.users.find_one({"email": email})
+    user = users_collection.find_one({"email": email})
     if not user:
-        raise Exception("Invalid credentials")
+        raise ValueError("Invalid credentials")
     
     # Verificar password
-    if not bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-        raise Exception("Invalid credentials")
+    if not bcrypt.checkpw(
+        password.encode('utf-8'), 
+        user['password'].encode('utf-8')
+    ):
+        raise ValueError("Invalid credentials")
     
     # Generar token
     token = generate_token(str(user['_id']), user['role'])
     
+    # Serializar usuario para respuesta
+    serialized_user = serialize_mongo_id(user.copy())
+    
     return {
         "token": token,
         "user": {
-            "id": str(user['_id']),
-            "email": user['email'],
-            "name": user.get('name'),
-            "role": user['role']
+            "id": serialized_user['id'],
+            "email": serialized_user['email'],
+            "name": serialized_user.get('name'),
+            "role": serialized_user['role']
         }
     }
 
@@ -71,4 +87,8 @@ def generate_token(user_id, role):
         'role': role,
         'exp': datetime.utcnow() + timedelta(days=1)
     }
-    return jwt.encode(payload, os.environ.get('SECRET_KEY', 'dev-secret-key'), algorithm='HS256')
+    return jwt.encode(
+        payload, 
+        os.environ.get('SECRET_KEY', 'dev-secret-key'), 
+        algorithm='HS256'
+    )
