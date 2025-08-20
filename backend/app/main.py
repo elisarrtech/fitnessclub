@@ -43,8 +43,8 @@ def create_app():
         app.register_blueprint(bookings.bookings_bp)
         print("✅ Blueprints registrados exitosamente")
         
-    except ImportError as import_error:
-        print(f"❌ Error importando blueprints: {import_error}")
+    except ImportError as e:
+        print(f"❌ Error importando blueprints: {e}")
         import traceback
         traceback.print_exc()
         
@@ -53,7 +53,7 @@ def create_app():
         def classes_fallback():
             return jsonify({
                 "error": "Classes blueprint not registered", 
-                "details": str(import_error),
+                "details": str(e),  # Usar 'e' directamente
                 "type": "ImportError"
             }), 500
             
@@ -61,12 +61,12 @@ def create_app():
         def classes_with_schedules_fallback():
             return jsonify({
                 "error": "Classes with schedules endpoint not available", 
-                "details": str(import_error),
+                "details": str(e),  # Usar 'e' directamente
                 "type": "ImportError"
             }), 500
     
-    except Exception as general_error:
-        print(f"❌ Error registrando blueprints: {general_error}")
+    except Exception as e:
+        print(f"❌ Error registrando blueprints: {e}")
         import traceback
         traceback.print_exc()
         
@@ -75,7 +75,7 @@ def create_app():
         def classes_fallback():
             return jsonify({
                 "error": "Classes blueprint registration failed", 
-                "details": str(general_error),
+                "details": str(e),  # Usar 'e' directamente
                 "type": "GeneralError"
             }), 500
             
@@ -83,7 +83,7 @@ def create_app():
         def classes_with_schedules_fallback():
             return jsonify({
                 "error": "Classes with schedules endpoint registration failed", 
-                "details": str(general_error),
+                "details": str(e),  # Usar 'e' directamente
                 "type": "GeneralError"
             }), 500
     
