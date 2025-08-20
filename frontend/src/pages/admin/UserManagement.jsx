@@ -1,6 +1,6 @@
 // frontend/src/pages/admin/UserManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { usersAPI } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
