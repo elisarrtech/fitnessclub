@@ -14,8 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar código fuente
 COPY . .
 
+# Verificar que los archivos __init__.py existan
+RUN find . -type d -exec touch {}/__init__.py \;
+
 # Exponer puerto
 EXPOSE 8000
 
-# COMANDO CORRECTO - Ejecutar como módulo:
+# COMANDO CORRECTO:
 CMD ["python", "-m", "app.main"]
