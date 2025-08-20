@@ -48,7 +48,16 @@ export const instructorsAPI = {
   getById: (id) => api.get(`/api/v1/instructors/${id}`),
 };
 
-// ¡FALTA ESTO! - Agregar usersAPI
+// Agregar al final de api.js
+export const scheduleAPI = {
+  getAll: () => api.get('/api/v1/schedules'),
+  getById: (id) => api.get(`/api/v1/schedules/${id}`),
+  create: (scheduleData) => api.post('/api/v1/schedules', scheduleData),
+  update: (id, scheduleData) => api.put(`/api/v1/schedules/${id}`, scheduleData),
+  delete: (id) => api.delete(`/api/v1/schedules/${id}`),
+  getByClass: (classId) => api.get(`/api/v1/schedules/class/${classId}`),
+};
+
 export const usersAPI = {
   getAll: () => api.get('/api/v1/users'),
   getById: (id) => api.get(`/api/v1/users/${id}`),
@@ -56,5 +65,5 @@ export const usersAPI = {
   update: (userData) => api.put('/api/v1/users/me', userData),
 };
 
-
 export default api;
+
