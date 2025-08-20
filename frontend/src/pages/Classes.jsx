@@ -19,17 +19,21 @@ const Classes = () => {
       const response = await classesAPI.getWithSchedules();
       setClasses(response.data);
     } catch (err) {
-      setError('Error al cargar las clases');
+      if (err.response?.status === 401) {
+        setError('Debes iniciar sesión para ver las clases');
+      } else if (err.response?.status === 404) {
+        setError('No se encontró la página de clases');
+      } else {
+        setError('Error al cargar las clases. Por favor, inténtalo de nuevo.');
+      }
       console.error('Error fetching classes:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleBookClass = (classData) => {
-    // Aquí implementaremos la lógica de reserva
-    console.log('Reservar clase:', classData);
-    alert(`Funcionalidad de reserva para ${classData.title} - Implementar en próxima iteración`);
+  const handleRetry = () => {
+    fetchClasses();
   };
 
   if (loading) {
@@ -42,7 +46,7 @@ const Classes = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-700">{error}</p>
           <button
-            onClick={fetchClasses}
+            onClick={handleRetry}
             className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Reintentar
