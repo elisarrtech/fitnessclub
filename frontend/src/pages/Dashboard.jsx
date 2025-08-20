@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Para desarrollo: permitir acceso temporal sin autenticación
-    const isDevelopmentMode = true; // Cambiar a false en producción
+    const isDevelopmentMode = false; // Cambiar a false en producción
     const mockUser = {
       id: 'mock-admin-123',
       name: 'Usuario de Prueba',
