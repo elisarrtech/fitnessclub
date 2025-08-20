@@ -6,8 +6,8 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
     
-    # Importar y registrar blueprints
-    from app.api.v1.auth.routes import auth_bp
+    # Registrar blueprints usando rutas relativas
+    from .api.v1.auth.routes import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
     
     @app.route("/")
