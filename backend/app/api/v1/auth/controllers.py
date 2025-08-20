@@ -7,7 +7,7 @@ import traceback
 def register_user(data):
     # Verificar que la conexión a MongoDB esté disponible
     if users_collection is None:
-        raise Exception("Database connection failed")
+        raise Exception("Database connection failed - Service temporarily unavailable")
     
     try:
         print("=== REGISTER USER ===")
