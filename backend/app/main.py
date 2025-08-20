@@ -8,7 +8,7 @@ def create_app():
     
     # Configurar CORS
     CORS(app, origins=[
-        "https://68a539c509058f80db1b1759--fitnessclubfront.netlify.app",
+        "https://fitnessclubfront.netlify.app/",
         "http://localhost:3000",
         "http://localhost:5173"
     ])
