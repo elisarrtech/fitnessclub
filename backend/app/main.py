@@ -2,19 +2,18 @@
 import os
 from flask import Flask, jsonify
 from flask_cors import CORS
-from app.api.v1 import auth, users, classes, instructors, bookings
 
 def create_app():
     app = Flask(__name__)
     
-    # Configurar CORS - Permite solicitudes desde tu frontend Netlify
+    # Configurar CORS
     CORS(app, origins=[
-        "https://68a53b5ad44d4ea56a6cb0c3--fitnessclubfront.netlify.app/", 
-        "http://localhost:3000",  # Para desarrollo local
-        "http://localhost:5173"   # Para Vite dev server
+        "https://68a53b5ad44d4ea56a6cb0c3--fitnessclubfront.netlify.app/",
+        "http://localhost:3000",
+        "http://localhost:5173"
     ])
-
-   @app.route("/")
+    
+    @app.route("/")
     def root():
         return jsonify({"message": "Fitness Club API - Python Flask"})
     
