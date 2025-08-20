@@ -1,11 +1,20 @@
-# app/main.py
 import os
 from flask import Flask, jsonify
 from flask_cors import CORS
+from app.api.v1.auth.routes import auth_bp
+# Importa otros blueprints cuando los tengas
+# from app.api.v1.dashboard.routes import dashboard_bp
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    
+    # Configuración
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    
+    # Registrar blueprints
+    app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
+    # app.register_blueprint(dashboard_bp, url_prefix='/api/v1/dashboard')
     
     @app.route("/")
     def root():
@@ -25,4 +34,4 @@ app = create_app()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=port, debug=True)  # debug=True para desarrollo
