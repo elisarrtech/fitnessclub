@@ -1,20 +1,15 @@
 # app/core/database.py
-from flask_cors import CORS
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-from bson import ObjectId
-from typing import Optional, Any, Dict
-
-# Configurar CORS
-CORS(app, origins=["https://your-frontend-url.netlify.app"])
+from flask_cors import CORS
 
 load_dotenv()
 
 # Conexión a MongoDB
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/fitnessclub")
 client = MongoClient(MONGODB_URI)
-db = client[os.getenv("DATABASE_NAME", "elisarrtech")]
+db = client[os.getenv("DATABASE_NAME", "fitnessclubdb")]
 
 # Colecciones
 users_collection = db.users
@@ -38,7 +33,7 @@ def init_db():
     except Exception as e:
         print(f"⚠️ Error creando índices: {e}")
 
-def serialize_mongo_id(obj: Dict[str, Any]) -> Dict[str, Any]:
+def serialize_mongo_id(obj):
     """Convertir ObjectId de MongoDB a string para JSON"""
     if obj and "_id" in obj:
         obj["id"] = str(obj["_id"])
