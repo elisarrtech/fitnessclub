@@ -17,6 +17,11 @@ COPY . .
 # Asegurar que todos los directorios tengan __init__.py
 RUN find . -type d -exec touch {}/__init__.py \;
 
+# Verificar estructura
+RUN ls -la app/
+RUN ls -la app/api/
+RUN ls -la app/api/v1/
+
 # Exponer puerto
 EXPOSE 8000
 
