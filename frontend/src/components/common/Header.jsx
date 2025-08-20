@@ -1,4 +1,4 @@
-// frontend/src/components/common/Header.jsx
+// frontend/src/components/common/Header.jsx (fragmento actualizado)
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -29,15 +29,44 @@ const Header = () => {
               {isAuthenticated ? (
                 <>
                   <li>
+                    <Link to="/schedule" className="hover:text-blue-200">Horarios</Link>
+                  </li>
+                  <li>
                     <Link to="/my-bookings" className="hover:text-blue-200">Mis Reservas</Link>
                   </li>
                   <li>
                     <Link to="/profile" className="hover:text-blue-200">Perfil</Link>
                   </li>
                   {user?.role === 'ADMIN' && (
-                    <li>
-                      <Link to="/dashboard" className="hover:text-blue-200">Dashboard</Link>
-                    </li>
+                    <>
+                      <li className="relative group">
+                        <button className="hover:text-blue-200">
+                          Administración
+                        </button>
+                        <ul className="absolute hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg py-2 mt-1 w-48 z-50">
+                          <li>
+                            <Link to="/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+                              Dashboard
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/admin/classes" className="block px-4 py-2 hover:bg-gray-100">
+                              Gestionar Clases
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/admin/instructors" className="block px-4 py-2 hover:bg-gray-100">
+                              Gestionar Instructores
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/admin/users" className="block px-4 py-2 hover:bg-gray-100">
+                              Gestionar Usuarios
+                            </Link>
+                          </li>
+                        </ul>
+                      </li>
+                    </>
                   )}
                   <li>
                     <button 
