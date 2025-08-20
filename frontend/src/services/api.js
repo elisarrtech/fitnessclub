@@ -65,5 +65,17 @@ export const usersAPI = {
   update: (userData) => api.put('/api/v1/users/me', userData),
 };
 
+// Agregar al final de api.js
+export const paymentsAPI = {
+  getAll: () => api.get('/api/v1/payments'),
+  getById: (id) => api.get(`/api/v1/payments/${id}`),
+  create: (paymentData) => api.post('/api/v1/payments', paymentData),
+  update: (id, paymentData) => api.put(`/api/v1/payments/${id}`, paymentData),
+  delete: (id) => api.delete(`/api/v1/payments/${id}`),
+  getRecent: (limit = 10) => api.get(`/api/v1/payments/recent?limit=${limit}`),
+  getByUser: (userId) => api.get(`/api/v1/payments/user/${userId}`),
+  processPayment: (paymentData) => api.post('/api/v1/payments/process', paymentData),
+};
+
 export default api;
 
