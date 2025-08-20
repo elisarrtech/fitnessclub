@@ -1,6 +1,6 @@
 // frontend/src/pages/admin/BulkNotifications.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { notificationsAPI } from '../../services/api';
 
 const BulkNotifications = () => {
