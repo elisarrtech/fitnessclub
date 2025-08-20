@@ -1,23 +1,42 @@
-// frontend/src/components/classes/ClassCard.jsx (actualizado)
+// frontend/src/components/classes/ClassCard.jsx
 import React, { useState } from 'react';
 import BookingForm from '../bookings/BookingForm';
-import WaitlistForm from '../bookings/WaitlistForm';
 
 const ClassCard = ({ class: classData, onBookSuccess }) => {
   const [showBookingForm, setShowBookingForm] = useState(null);
-  const [showWaitlistForm, setShowWaitlistForm] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(null);
-  const [waitlistSuccess, setWaitlistSuccess] = useState(null);
+
+  // Función para calcular lugares disponibles con validación
+  const getAvailableSeats = (schedule) => {
+    // Validar que los datos existan y sean números válidos
+    if (!schedule || !classData || !classData.capacity) {
+      return 'N/A';
+    }
+    
+    const currentBookings = schedule.current_bookings || 0;
+    const capacity = classData.capacity;
+    
+    // Calcular lugares disponibles
+    const available = capacity - currentBookings;
+    
+    // Devolver como string para evitar problemas de renderizado
+    return available < 0 ? 'Llena' : available.toString();
+  };
+
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short'
+    }) + ' ' + date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   const handleBookClass = (schedule) => {
-    // Verificar si la clase está llena
-    const isFull = schedule.current_bookings >= classData.capacity;
-    
-    if (isFull) {
-      setShowWaitlistForm(schedule);
-    } else {
-      setShowBookingForm(schedule);
-    }
+    setShowBookingForm(schedule);
   };
 
   const handleBookingSuccess = (bookingData) => {
@@ -31,28 +50,6 @@ const ClassCard = ({ class: classData, onBookSuccess }) => {
     setTimeout(() => {
       setBookingSuccess(null);
     }, 3000);
-  };
-
-  const handleWaitlistSuccess = (waitlistData) => {
-    setWaitlistSuccess(waitlistData);
-    setShowWaitlistForm(null);
-    
-    // Ocultar mensaje de éxito después de 3 segundos
-    setTimeout(() => {
-      setWaitlistSuccess(null);
-    }, 3000);
-  };
-
-  const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short'
-    }) + ' ' + date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
   };
 
   if (showBookingForm) {
@@ -70,24 +67,9 @@ const ClassCard = ({ class: classData, onBookSuccess }) => {
     );
   }
 
-  if (showWaitlistForm) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="max-w-md w-full">
-          <WaitlistForm
-            schedule={showWaitlistForm}
-            classData={classData}
-            onWaitlistSuccess={handleWaitlistSuccess}
-            onCancel={() => setShowWaitlistForm(null)}
-          />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {(bookingSuccess || waitlistSuccess) && (
+      {bookingSuccess && (
         <div className="bg-green-50 border-l-4 border-green-400 p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -97,9 +79,7 @@ const ClassCard = ({ class: classData, onBookSuccess }) => {
             </div>
             <div className="ml-3">
               <p className="text-sm text-green-700">
-                <span className="font-medium">
-                  {bookingSuccess ? '¡Reserva confirmada!' : '¡Agregado a lista de espera!'}
-                </span> {bookingSuccess ? 'Tu clase ha sido reservada exitosamente.' : 'Serás notificado si hay disponibilidad.'}
+                <span className="font-medium">¡Reserva confirmada!</span> Tu clase ha sido reservada exitosamente.
               </p>
             </div>
           </div>
@@ -132,39 +112,24 @@ const ClassCard = ({ class: classData, onBookSuccess }) => {
           <div className="mt-4">
             <h4 className="text-sm font-medium text-gray-900">Próximos horarios:</h4>
             <ul className="mt-2 space-y-2">
-              {classData.schedules.slice(0, 3).map((schedule) => {
-                const isFull = schedule.current_bookings >= classData.capacity;
-                const availability = classData.capacity - schedule.current_bookings;
-                
-                return (
-                  <li key={schedule.id} className="flex justify-between items-center text-sm">
-                    <div className="flex-1">
-                      <span className="text-gray-600">
-                        {formatDateTime(schedule.start_ts)}
-                      </span>
-                      {isFull ? (
-                        <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          Llena
-                        </span>
-                      ) : (
-                        <span className="ml-2 text-gray-500">
-                          ({availability} lugares)
-                        </span>
-                      )}
-                    </div>
+              {classData.schedules.slice(0, 3).map((schedule) => (
+                <li key={schedule.id} className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600">
+                    {formatDateTime(schedule.start_ts)}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-gray-500 mr-2">
+                      {getAvailableSeats(schedule)} lugares
+                    </span>
                     <button
                       onClick={() => handleBookClass(schedule)}
-                      className={`font-medium ${
-                        isFull 
-                          ? 'text-yellow-600 hover:text-yellow-800' 
-                          : 'text-blue-600 hover:text-blue-800'
-                      }`}
+                      className="text-blue-600 hover:text-blue-800 font-medium"
                     >
-                      {isFull ? 'Lista Espera' : 'Reservar'}
+                      Reservar
                     </button>
-                  </li>
-                );
-              })}
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
         )}
