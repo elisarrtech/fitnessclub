@@ -1,5 +1,11 @@
 # app/models/user.py
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+try:
+    from pydantic import EmailStr
+except ImportError:
+    # Fallback si email_validator no está instalado
+    EmailStr = str
+
 from typing import Optional
 from enum import Enum
 from datetime import datetime
