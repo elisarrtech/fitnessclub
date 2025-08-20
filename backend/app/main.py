@@ -30,6 +30,38 @@ def create_app():
     def test_route():
         return jsonify({"message": "Test route working"})
     
+    # Registrar blueprints con manejo de errores
+    try:
+        print("Intentando importar blueprints...")
+        from app.api.v1 import auth, users, classes, instructors, bookings
+        print("✅ Blueprints importados exitosamente")
+        
+        app.register_blueprint(auth.auth_bp)
+        app.register_blueprint(users.users_bp)
+        app.register_blueprint(classes.classes_bp)
+        app.register_blueprint(instructors.instructors_bp)
+        app.register_blueprint(bookings.bookings_bp)
+        print("✅ Blueprints registrados exitosamente")
+        
+    except ImportError as e:
+        print(f"❌ Error importando blueprints: {e}")
+        import traceback
+        traceback.print_exc()
+        
+        # Registrar rutas de fallback para diagnóstico
+        @app.route("/api/v1/classes")
+        def classes_fallback():
+            return jsonify({"error": "Classes blueprint not registered", "details": str(e)}), 500
+            
+        @app.route("/api/v1/classes/with-schedules")
+        def classes_with_schedules_fallback():
+            return jsonify({"error": "Classes with schedules endpoint not available", "details": str(e)}), 500
+    
+    except Exception as e:
+        print(f"❌ Error registrando blueprints: {e}")
+        import traceback
+        traceback.print_exc()
+    
     return app
 
 app = create_app()
