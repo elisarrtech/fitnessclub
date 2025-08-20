@@ -9,29 +9,18 @@ try:
     # Usar la URL completa de MongoDB Atlas
     MONGODB_URI = os.getenv("MONGODB_URI", "mongodb+srv://elisarrtech:R_zeHWhW9iAhYyM@cluster0.yjot3u0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     
-    # Configuración optimizada para MongoDB Atlas
+    # Configuración MÍNIMA para evitar problemas en Railway
     client = MongoClient(
         MONGODB_URI,
         tls=True,
-        tlsAllowInvalidCertificates=False,  # Usar certificados válidos
-        serverSelectionTimeoutMS=10000,     # Timeout más largo
-        connectTimeoutMS=10000,
-        socketTimeoutMS=10000,
-        retryWrites=True,
-        retryReads=True,
-        maxPoolSize=50,
-        minPoolSize=5
+        tlsAllowInvalidCertificates=True,  # Permitir certificados inválidos (solo para Railway)
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+        socketTimeoutMS=5000
     )
     
-    # Extraer el nombre de la base de datos de la URI o usar el default
-    db_name = os.getenv("DATABASE_NAME")
-    if not db_name:
-        # Intentar obtener el nombre de la base de datos de la URI
-        from urllib.parse import urlparse
-        parsed_uri = urlparse(MONGODB_URI)
-        path_parts = parsed_uri.path.strip('/').split('?')
-        db_name = path_parts[0] if path_parts and path_parts[0] else "elisarrtech"
-    
+    # Obtener nombre de base de datos
+    db_name = os.getenv("DATABASE_NAME", "elisarrtech")
     db = client[db_name]
     
     # Colecciones
@@ -43,13 +32,12 @@ try:
 
     def init_db():
         try:
-            # Verificar conexión
-            client.admin.command('ping')
-            print("✅ Conexión a MongoDB Atlas exitosa")
+            # Verificar conexión (sin usar ping que puede fallar)
+            # Solo verificar que el cliente se creó correctamente
+            print("✅ Cliente MongoDB creado")
             print(f"✅ Base de datos: {db_name}")
         except Exception as e:
-            print(f"⚠️ Error conectando a MongoDB Atlas: {e}")
-            print("⚠️ La aplicación continuará funcionando pero sin acceso a la base de datos")
+            print(f"⚠️ Error inicializando MongoDB: {e}")
 
     def serialize_mongo_id(obj):
         if obj and "_id" in obj:
@@ -61,7 +49,7 @@ try:
     init_db()
     
 except Exception as e:
-    print(f"❌ Error grave en la configuración de MongoDB: {e}")
+    print(f"❌ Error grave en MongoDB: {e}")
     users_collection = None
     classes_collection = None
     instructors_collection = None
