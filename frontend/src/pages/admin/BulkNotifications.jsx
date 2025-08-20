@@ -1,10 +1,10 @@
 // frontend/src/pages/admin/BulkNotifications.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+  const { user } = useContext(AuthContext);
 import { notificationsAPI } from '../../services/api';
 
 const BulkNotifications = () => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     title: '',
     message: '',
