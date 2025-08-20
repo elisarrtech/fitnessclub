@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from app.core.database import db
+# from app.core.database import db
 import os
 
 def create_app():
