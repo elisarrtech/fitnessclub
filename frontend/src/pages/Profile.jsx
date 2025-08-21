@@ -1,5 +1,5 @@
 // frontend/src/pages/Profile.jsx
-import React, { useState } from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 import { AuthContext } from '../contexts/AuthContext';
 
 const Profile = () => {
