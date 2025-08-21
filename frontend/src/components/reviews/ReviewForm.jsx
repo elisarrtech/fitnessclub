@@ -1,9 +1,9 @@
 // frontend/src/components/reviews/ReviewForm.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const ReviewForm = ({ classId, onSubmit, onCancel }) => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
