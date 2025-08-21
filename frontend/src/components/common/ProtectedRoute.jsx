@@ -1,5 +1,5 @@
 // frontend/src/components/common/ProtectedRoute.jsx
-import React from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
