@@ -1,7 +1,7 @@
 // frontend/src/components/auth/RegisterForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { authAPI } from '../../services/api';
 
 const RegisterForm = () => {
@@ -15,7 +15,7 @@ const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { login } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
