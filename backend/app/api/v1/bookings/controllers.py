@@ -1,8 +1,9 @@
+# app/api/v1/bookings/controllers.py
 from datetime import datetime
 from app.core.database import bookings_collection, schedules_collection, users_collection
 import traceback
 
- async def create_booking(data):
+def create_booking(data):
     try:
         print("=== CREATE BOOKING ===")
         print(f"Booking data: {data}")
@@ -61,7 +62,7 @@ import traceback
         traceback.print_exc()
         raise
 
- async def get_bookings_by_user(user_id):
+def get_bookings_by_user(user_id):
     try:
         print(f"=== GET BOOKINGS BY USER {user_id} ===")
         
@@ -86,7 +87,7 @@ import traceback
         traceback.print_exc()
         raise
 
- async def cancel_booking(booking_id, user_id):
+def cancel_booking(booking_id, user_id):
     try:
         print(f"=== CANCEL BOOKING {booking_id} ===")
         
@@ -116,5 +117,32 @@ import traceback
             
     except Exception as e:
         print(f"Error in cancel_booking: {e}")
+        traceback.print_exc()
+        raise
+
+def get_bookings_with_details():
+    try:
+        print("=== GET BOOKINGS WITH DETAILS ===")
+        
+        # Esta función puede implementarse según tus necesidades específicas
+        # Por ahora, devuelve todas las reservas
+        bookings = list(bookings_collection.find())
+        
+        # Convertir ObjectId a string
+        for booking in bookings:
+            if "_id" in booking:
+                booking["id"] = str(booking["_id"])
+                del booking["_id"]
+            if "user_id" in booking:
+                booking["user_id"] = str(booking["user_id"])
+            if "schedule_id" in booking:
+                booking["schedule_id"] = str(booking["schedule_id"])
+            if "class_id" in booking:
+                booking["class_id"] = str(booking["class_id"])
+        
+        return bookings
+        
+    except Exception as e:
+        print(f"Error in get_bookings_with_details: {e}")
         traceback.print_exc()
         raise
