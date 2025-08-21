@@ -1,10 +1,10 @@
 // frontend/src/components/bookings/WaitlistForm.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { bookingsAPI } from '../../services/api';
 
 const WaitlistForm = ({ schedule, classData, onWaitlistSuccess, onCancel }) => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
