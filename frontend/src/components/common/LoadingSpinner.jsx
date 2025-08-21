@@ -1,5 +1,5 @@
 // frontend/src/components/common/LoadingSpinner.jsx
-import React from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 
 const LoadingSpinner = () => {
   return (
