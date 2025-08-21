@@ -1,12 +1,12 @@
 // frontend/src/components/bookings/BookingForm.jsx (actualizado con recordatorios)
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { bookingsAPI } from '../../services/api';
 import notificationService from '../../services/notificationService';
 import reminderService from '../../services/reminderService';
 
 const BookingForm = ({ schedule, classData, onBookingSuccess, onCancel }) => {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
