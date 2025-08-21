@@ -21,7 +21,11 @@ def create_app():
     
     # Registrar blueprints
     from app.api.v1.auth.routes import auth_bp
+    from app.api.v1.bookings import bookings_bp 
+    
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
+    app.register_blueprint(bookings_bp, url_prefix='/api/v1/bookings') 
+    
     
     @app.route("/")
     def root():
