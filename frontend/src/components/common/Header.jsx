@@ -1,5 +1,5 @@
 // frontend/src/components/common/Header.jsx (fragmento actualizado)
-import React from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
