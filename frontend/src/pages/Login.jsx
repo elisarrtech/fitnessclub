@@ -1,5 +1,5 @@
 // frontend/src/pages/Login.jsx
-import React, { useState } from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { authAPI } from '../services/api';
