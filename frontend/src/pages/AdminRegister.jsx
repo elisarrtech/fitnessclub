@@ -1,5 +1,5 @@
 // frontend/src/pages/AdminRegister.jsx
-import React from 'react';
+import React, { useContext } from 'react';  // ✅ Agrega useContext aquí
 
 const AdminRegister = () => {
   return (
